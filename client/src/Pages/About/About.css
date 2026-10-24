@@ -1,0 +1,186 @@
+/* Base Container */
+.about-page {
+    background-color: #ffffff;
+    color: #333333;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    padding: 60px 20px;
+    display: flex;
+    justify-content: center;
+}
+
+.about-container {
+    max-width: 800px;
+    width: 100%;
+    line-height: 1.6;
+}
+
+/* Header */
+.about-header {
+    text-align: center;
+    margin-bottom: 50px;
+}
+
+.about-header h1 {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin-bottom: 12px;
+    letter-spacing: -0.5px;
+}
+
+.about-header .subtitle {
+    font-size: 0.95rem;
+    font-style: italic;
+    color: #666666;
+}
+
+/* Sections */
+.about-section {
+    margin-bottom: 40px;
+}
+
+.about-section h2 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin-bottom: 16px;
+}
+
+.about-section p {
+    font-size: 0.95rem;
+    color: #444444;
+    margin-bottom: 16px;
+    text-align: left;
+}
+
+.about-section p:last-child {
+    margin-bottom: 0;
+}
+
+/* Mission Box */
+.mission-box {
+    background-color: #fdf5f6;
+    /* Light pinkish background */
+    border-left: 3px solid #d36b73;
+    /* Accent border */
+    padding: 20px 24px;
+    margin: 30px 0;
+    border-radius: 0 4px 4px 0;
+}
+
+.mission-box p {
+    margin: 0;
+    font-size: 0.95rem;
+    color: #8a3b42;
+    /* Dark reddish text */
+    line-height: 1.5;
+}
+
+.mission-box strong {
+    font-weight: 600;
+}
+
+/* Values List */
+.values-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.value-item {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 20px;
+}
+
+.value-item:last-child {
+    margin-bottom: 0;
+}
+
+.value-icon {
+    flex-shrink: 0;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 12px;
+    margin-top: 2px;
+    color: white;
+}
+
+.value-icon svg {
+    width: 14px;
+    height: 14px;
+}
+
+/* Icon Colors */
+.icon-purple {
+    background-color: #9b51e0;
+}
+
+.icon-blue {
+    background-color: #2d9cdb;
+}
+
+.icon-orange {
+    background-color: #f2994a;
+}
+
+.icon-pink {
+    background-color: #d860a0;
+}
+
+.value-content {
+    font-size: 0.95rem;
+    color: #444444;
+    line-height: 1.5;
+}
+
+.value-title {
+    font-weight: 700;
+    color: #333333;
+}
+
+/* Footer */
+.about-footer {
+    text-align: center;
+    margin-top: 60px;
+}
+
+.footer-divider {
+    border: 0;
+    border-top: 1px solid #eaeaea;
+    margin-bottom: 30px;
+}
+
+.footer-text {
+    font-size: 0.9rem;
+    font-style: italic;
+    color: #666666;
+    margin-bottom: 20px;
+    line-height: 1.5;
+}
+
+.signature {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #333333;
+    margin: 0;
+}
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+    .about-page {
+        padding: 40px 16px;
+    }
+
+    .about-header h1 {
+        font-size: 1.75rem;
+    }
+
+    .mission-box {
+        padding: 16px;
+    }
+}

@@ -1,0 +1,172 @@
+/* Base Page Container */
+.track-page {
+    background-color: #ffffff;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    padding: 60px 20px;
+    display: flex;
+    justify-content: center;
+    /* Ensures white background fills the screen */
+}
+
+.track-container {
+    width: 100%;
+    max-width: 900px;
+    /* Matches the wide layout of the form box */
+}
+
+/* Header */
+.track-title {
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin-bottom: 30px;
+    text-align: left;
+}
+
+/* Main Form Box */
+.track-box {
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 50px;
+    display: flex;
+    align-items: stretch;
+    /* Ensures divider stretches full height */
+    justify-content: space-between;
+    background-color: #ffffff;
+}
+
+/* Columns */
+.track-column {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.right-column {
+    padding-left: 20px;
+}
+
+/* Form Inputs */
+.input-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 25px;
+}
+
+.input-group label {
+    font-size: 1rem;
+    color: #333333;
+    margin-bottom: 8px;
+}
+
+.track-input {
+    width: 100%;
+    max-width: 320px;
+    /* Controls input width exactly as shown */
+    padding: 12px 16px;
+    font-size: 1rem;
+    color: #333333;
+    border: 1px solid #333333;
+    /* Dark border as shown in screenshot */
+    border-radius: 4px;
+    outline: none;
+    box-sizing: border-box;
+}
+
+.track-input:focus {
+    border-color: #c4547e;
+    box-shadow: 0 0 0 2px rgba(196, 84, 126, 0.2);
+}
+
+/* Buttons */
+.track-btn {
+    background-color: #c4547e;
+    /* Magenta/pink matching the brand */
+    color: #ffffff;
+    font-size: 1rem;
+    font-weight: 700;
+    padding: 12px 30px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    align-self: flex-start;
+    /* Aligns button to the left of its column */
+    margin-top: 10px;
+    transition: background-color 0.2s ease;
+}
+
+.track-btn:hover {
+    background-color: #b0456e;
+}
+
+/* Middle Divider */
+.track-divider {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    width: 60px;
+    /* Space for the divider and text */
+    margin: 0 20px;
+}
+
+/* The vertical dashed line */
+.track-divider::before {
+    content: '';
+    position: absolute;
+    top: 10%;
+    bottom: 10%;
+    left: 50%;
+    transform: translateX(-50%);
+    border-left: 1px dashed #c0c0c0;
+    z-index: 1;
+}
+
+/* The "Or" text */
+.divider-text {
+    background-color: #ffffff;
+    /* Masks the dashed line behind it */
+    color: #333333;
+    padding: 10px 0;
+    font-size: 1rem;
+    z-index: 2;
+    /* Sits above the dashed line */
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .track-box {
+        flex-direction: column;
+        padding: 30px;
+    }
+
+    .track-divider {
+        width: 100%;
+        height: 60px;
+        margin: 20px 0;
+    }
+
+    .track-divider::before {
+        top: 50%;
+        bottom: auto;
+        left: 10%;
+        right: 10%;
+        width: 80%;
+        transform: translateY(-50%);
+        border-left: none;
+        border-top: 1px dashed #c0c0c0;
+    }
+
+    .divider-text {
+        padding: 0 15px;
+    }
+
+    .right-column {
+        padding-left: 0;
+    }
+
+    .track-input {
+        max-width: 100%;
+        /* Full width on mobile */
+    }
+}

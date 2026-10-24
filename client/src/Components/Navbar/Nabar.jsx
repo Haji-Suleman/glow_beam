@@ -8,10 +8,10 @@ const ANNOUNCEMENT = "90-day money-back guarantee";
 const LINKS = [
     { label: "Home", href: "/" },
     { label: "Shop", href: "/shop" },
-    { label: "Best Sellers", href: "/best-sellers" },
-    { label: "About Us", href: "/about" },
-    { label: "Track Your Order", href: "/track-order" },
-    { label: "Contact", href: "/contact" },
+    { label: "Best Sellers", href: "/collections/best-sellers" },
+    { label: "About Us", href: "/pages/about-us" },
+    { label: "Track Your Order", href: "/app/parcelpanel" },
+    { label: "Contact", href: "/pages/contact" },
 ];
 
 function SearchIcon() {

@@ -1,0 +1,119 @@
+/* Main Section Container */
+.contact-section {
+    background-color: #ffffff;
+    padding: 80px 20px;
+    /* Adjust top/bottom padding as needed */
+    display: flex;
+    justify-content: center;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+.contact-container {
+    width: 100%;
+    max-width: 800px;
+    /* Controls the width of the form */
+}
+
+/* Heading */
+.contact-title {
+    text-align: center;
+    font-size: 2.5rem;
+    font-weight: 800;
+    /* Extra bold */
+    color: #1a1a1a;
+    margin-bottom: 40px;
+    letter-spacing: -0.5px;
+}
+
+/* Form Layout */
+.contact-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    /* Space between rows */
+}
+
+.form-row {
+    display: flex;
+    width: 100%;
+}
+
+.split-row {
+    gap: 20px;
+    /* Space between Name and Email */
+}
+
+/* Inputs and Textareas */
+.form-input {
+    width: 100%;
+    padding: 16px 20px;
+    font-size: 1rem;
+    color: #333333;
+    background-color: #fdf8f9;
+    /* Very light pink background */
+    border: 1px solid #ebd3da;
+    /* Light pink border */
+    border-radius: 6px;
+    /* Slightly rounded corners */
+    box-sizing: border-box;
+    outline: none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    font-family: inherit;
+}
+
+.form-input::placeholder {
+    color: #777777;
+    opacity: 1;
+}
+
+/* Focus states for accessibility and polish */
+.form-input:focus {
+    border-color: #d1889e;
+    box-shadow: 0 0 0 3px rgba(209, 136, 158, 0.1);
+}
+
+/* Textarea specific styling */
+.form-textarea {
+    resize: vertical;
+    /* Allow user to resize vertically only */
+    min-height: 100px;
+}
+
+.large-textarea {
+    min-height: 140px;
+}
+
+/* Button */
+.send-button {
+    width: 100%;
+    padding: 18px;
+    font-size: 1rem;
+    font-weight: 700;
+    color: #ffffff;
+    background-color: #c4547e;
+    /* Solid mauve/pink */
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    text-align: center;
+    margin-top: 10px;
+    /* Extra space above the button */
+}
+
+.send-button:hover {
+    background-color: #b0456e;
+    /* Slightly darker on hover */
+}
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+    .split-row {
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .contact-title {
+        font-size: 2rem;
+    }
+}
