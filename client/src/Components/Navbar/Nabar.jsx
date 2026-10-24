@@ -7,7 +7,7 @@ const ANNOUNCEMENT = "90-day money-back guarantee";
 
 const LINKS = [
     { label: "Home", href: "/" },
-    { label: "Shop", href: "/shop" },
+    { label: "The Sculpt Brief™", href: "/products/glowbeam-sculpt-brief" },
     { label: "Best Sellers", href: "/collections/best-sellers" },
     { label: "About Us", href: "/pages/about-us" },
     { label: "Track Your Order", href: "/app/parcelpanel" },

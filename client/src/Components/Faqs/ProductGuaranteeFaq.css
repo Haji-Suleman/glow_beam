@@ -1,0 +1,282 @@
+/* Base Section */
+.guarantee-faq-section {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 60px 20px;
+    background-color: #ffffff;
+    color: #333;
+    overflow: hidden;
+    /* Prevents scrollbar jumping during animations */
+}
+
+/* --- Keyframe Animations --- */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animate-fade-in-up {
+    animation: fadeInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    opacity: 0;
+    /* Starts hidden */
+}
+
+.delay-1 {
+    animation-delay: 0.15s;
+}
+
+.delay-2 {
+    animation-delay: 0.3s;
+}
+
+/* --- Button Interactions --- */
+.btn-interactive {
+    transition: all 0.25s ease;
+}
+
+.btn-interactive:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(196, 84, 126, 0.25);
+}
+
+.btn-interactive:active {
+    transform: translateY(1px) scale(0.98);
+    box-shadow: 0 2px 8px rgba(196, 84, 126, 0.15);
+}
+
+/* --- Guarantee Box --- */
+.guarantee-box {
+    border: 1px solid #e5bccc;
+    background-color: #fdfafb;
+    border-radius: 8px;
+    padding: 40px 30px;
+    max-width: 500px;
+    text-align: center;
+    margin-bottom: 60px;
+    box-sizing: border-box;
+    transition: box-shadow 0.3s ease;
+}
+
+.guarantee-box:hover {
+    box-shadow: 0 10px 30px rgba(229, 188, 204, 0.2);
+}
+
+.shield-icon-wrapper {
+    width: 44px;
+    height: 44px;
+    background-color: #c4547e;
+    color: #ffffff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 16px auto;
+    transition: transform 0.3s ease;
+}
+
+.guarantee-box:hover .shield-icon-wrapper {
+    transform: scale(1.05);
+    /* Subtle pop on hover */
+}
+
+.guarantee-title {
+    font-size: 1.4rem;
+    color: #c4547e;
+    font-weight: 700;
+    margin: 0 0 16px 0;
+}
+
+.cursive-text {
+    font-family: 'Georgia', serif;
+    font-style: italic;
+    font-weight: 400;
+    font-size: 1.5rem;
+    margin-right: 4px;
+}
+
+.guarantee-desc {
+    font-size: 0.85rem;
+    color: #555555;
+    line-height: 1.6;
+    margin-bottom: 24px;
+    padding: 0 10px;
+}
+
+.guarantee-btn {
+    background-color: #c4547e;
+    color: #ffffff;
+    border: none;
+    border-radius: 6px;
+    padding: 12px 28px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    margin-bottom: 20px;
+}
+
+.guarantee-features {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    font-size: 0.65rem;
+    color: #777777;
+    flex-wrap: wrap;
+}
+
+/* --- FAQ Section --- */
+.faq-section {
+    width: 100%;
+    max-width: 800px;
+    margin-bottom: 50px;
+}
+
+.faq-title {
+    text-align: center;
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 24px;
+    color: #111;
+}
+
+.faq-list {
+    display: flex;
+    flex-direction: column;
+}
+
+.faq-item {
+    border-bottom: 1px solid #f0f0f0;
+    transition: background-color 0.2s ease;
+}
+
+.faq-item:hover {
+    background-color: #fafafa;
+    /* Subtle highlight on hover */
+}
+
+.faq-question {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 12px;
+    /* Moved padding here for better hover area */
+    cursor: pointer;
+    user-select: none;
+}
+
+.question-text {
+    font-size: 0.85rem;
+    color: #333333;
+    font-weight: 500;
+    transition: color 0.2s ease;
+}
+
+.faq-item:hover .question-text,
+.faq-item.active .question-text {
+    color: #c4547e;
+    /* Brand color on hover/open */
+}
+
+/* Icon Animations */
+.faq-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    color: #999;
+    transition: color 0.3s ease, transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.faq-item.active .faq-icon {
+    transform: rotate(90deg);
+    /* Rotates the plus into an 'x' */
+    color: #c4547e;
+}
+
+.faq-icon .horizontal-line,
+.faq-icon .vertical-line {
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
+    transform-origin: center;
+}
+
+/* When open, fade out vertical line to make it an 'x' instead of a '+' */
+.faq-item.active .vertical-line {
+    transform: rotate(90deg);
+    opacity: 0;
+}
+
+/* --- FAQ Smooth Expansion (Grid Method) --- */
+.faq-answer-wrapper {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.faq-answer-wrapper.open {
+    grid-template-rows: 1fr;
+}
+
+/* Inner wrapper MUST have overflow hidden for the grid trick to work */
+.faq-answer-inner {
+    overflow: hidden;
+}
+
+.faq-answer-content {
+    padding: 0 12px 16px 12px;
+    /* Top padding handled by wrapper open */
+    font-size: 0.85rem;
+    color: #666666;
+    line-height: 1.6;
+    opacity: 0;
+    transform: translateY(-10px);
+    transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+.faq-answer-wrapper.open .faq-answer-content {
+    opacity: 1;
+    transform: translateY(0);
+    transition-delay: 0.1s;
+    /* Delays text fade in slightly for smoothness */
+}
+
+.faq-answer-content strong {
+    font-weight: 600;
+    color: #444444;
+}
+
+/* --- Bottom CTA --- */
+.bottom-cta-wrapper {
+    margin-top: 20px;
+}
+
+.bottom-cta-btn {
+    background-color: #c4547e;
+    color: #ffffff;
+    border: none;
+    border-radius: 6px;
+    padding: 16px 36px;
+    font-size: 0.95rem;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+    .guarantee-box {
+        padding: 30px 20px;
+    }
+
+    .guarantee-features {
+        flex-direction: column;
+        gap: 6px;
+    }
+}
