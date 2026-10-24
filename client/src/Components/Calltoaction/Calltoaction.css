@@ -1,0 +1,160 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;0,500;0,600;0,700;1,700&display=swap");
+
+/* Change these to restyle the section */
+.cta {
+    --c-accent: #bc5386;
+    --c-text: #2b2230;
+    --c-body: #5b4b60;
+    --c-soft: #8a7d8e;
+    font-family: "Poppins", system-ui, -apple-system, "Segoe UI", sans-serif;
+    color: var(--c-text);
+    background: #fff;
+
+    /* the Benefits section above already adds 100px below itself,
+     so together they make the ~190px gap of the original */
+    padding: 88px 0 80px;
+    text-align: center;
+}
+
+.cta__inner {
+    width: min(1000px, 100% - 48px);
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* ---------- Round photo ---------- */
+.cta__photo {
+    display: block;
+    width: 200px;
+    height: 200px;
+    border: 3px solid var(--c-accent);
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+/* ---------- Headline + text ---------- */
+.cta__title {
+    margin: 22px 0 0;
+    font-size: 1.75rem;
+    font-weight: 700;
+    line-height: 1.15;
+    color: var(--c-text);
+}
+
+.cta__highlight {
+    font-style: italic;
+    font-weight: 700;
+    color: var(--c-accent);
+}
+
+.cta__text {
+    max-width: 480px;
+    margin: 10px 0 0;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    letter-spacing: 0.02em;
+    color: var(--c-body);
+}
+
+/* ---------- Button ---------- */
+.cta__button {
+    display: inline-block;
+    margin-top: 24px;
+    padding: 17px 44px;
+    border-radius: 8px;
+    background: var(--c-accent);
+    color: #fff;
+    font-size: 1rem;
+    font-weight: 700;
+    line-height: 1.5;
+    letter-spacing: 0.01em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: filter 0.15s ease;
+}
+
+.cta__button:hover {
+    filter: brightness(0.92);
+}
+
+.cta__button:focus-visible {
+    outline: 2px solid var(--c-text);
+    outline-offset: 3px;
+}
+
+/* ---------- Guarantee line ---------- */
+.cta__guarantee {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 9px;
+    margin: 22px 0 0;
+    font-size: 0.85rem;
+    line-height: 1.5;
+    letter-spacing: 0.05em;
+    color: var(--c-body);
+}
+
+.cta__guarantee strong {
+    font-weight: 700;
+    color: var(--c-text);
+}
+
+.cta__shield {
+    flex: none;
+    width: 18px;
+    height: 20px;
+    color: var(--c-accent);
+}
+
+/* ---------- Trust points ---------- */
+.cta__trust {
+    list-style: none;
+    max-width: 600px;
+    margin: 20px 0 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 18px 17px;
+    font-size: 0.75rem;
+    line-height: 1.5;
+    letter-spacing: 0.05em;
+    color: var(--c-soft);
+}
+
+/* ---------- Mobile / tablet ---------- */
+@media (max-width: 900px) {
+    .cta {
+        padding: 56px 0 56px;
+    }
+
+    .cta__photo {
+        width: 160px;
+        height: 160px;
+    }
+
+    .cta__title {
+        font-size: 1.5rem;
+    }
+
+    .cta__button {
+        display: block;
+        width: 100%;
+        max-width: 320px;
+        padding-left: 24px;
+        padding-right: 24px;
+    }
+
+    .cta__guarantee {
+        flex-wrap: wrap;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .cta__button {
+        transition: none;
+    }
+}
