@@ -4,7 +4,7 @@ import "./Benefits.css";
 //    Keep "c_fill,w_760,h_560,f_auto,q_auto" in it: it crops the image to the
 //    right shape (19:14) and serves a small, modern file format automatically.
 const REVIEW_IMAGE =
-    "https://res.cloudinary.com/YOUR_CLOUD_NAME/image/upload/c_fill,w_760,h_560,f_auto,q_auto/YOUR_IMAGE.jpg";
+    "https://res.cloudinary.com/fozdhxik/image/upload/f_auto/q_auto/avis-07-balayage33-fuchsia-hold-ALT.png";
 
 function CheckIcon() {
     return (

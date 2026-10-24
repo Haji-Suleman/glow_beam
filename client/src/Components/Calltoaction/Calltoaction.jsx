@@ -4,7 +4,7 @@ import "./CallToAction.css";
 //    Keep "c_fill,g_auto,w_400,h_400,f_auto,q_auto" in it: it crops the image
 //    to a square around the main subject and serves a small, modern file format.
 const CTA_IMAGE =
-    "https://res.cloudinary.com/YOUR_CLOUD_NAME/image/upload/c_fill,g_auto,w_400,h_400,f_auto,q_auto/YOUR_IMAGE.jpg";
+    "https://res.cloudinary.com/fozdhxik/image/upload/f_auto/q_auto/avis-10-latina35-plum-hold-ALT.png";
 
 function ShieldIcon() {
     return (

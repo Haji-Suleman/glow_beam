@@ -1,101 +1,170 @@
-import React from 'react';
-import './Footer.css';
+import { useEffect, useId, useMemo } from "react";
+import { buildCountryOptions } from "../../Store/Country/Countries.js";
+import useCountry from "../../Store/Country/UseCountry.js";
+import "./Footer.css";
 
-const Footer = () => {
+/* ---------- Animated waves at the top of the footer ----------
+   Three layers drawn as sine waves. Each one is wider than the screen and
+   slides by exactly one period, so the loop never jumps. */
+const WAVE_HEIGHT = 56;
+const REPEATS = 3;
+
+function wavePath({ period, amp, mean, phase }) {
+    const width = period * REPEATS;
+    const y = (x) => (mean - amp * Math.sin((2 * Math.PI * x) / period + phase)).toFixed(1);
+    let d = `M0 ${WAVE_HEIGHT} L0 ${y(0)}`;
+    for (let x = 10; x <= width; x += 10) d += ` L${x} ${y(x)}`;
+    return `${d} L${width} ${WAVE_HEIGHT} Z`;
+}
+
+const WAVES = [
+    { id: "back", period: 1750, amp: 19, mean: 25, phase: 0, duration: "8s", dir: "right" },
+    { id: "mid", period: 1500, amp: 10, mean: 27, phase: 2, duration: "12s", dir: "right" },
+    { id: "front", period: 1750, amp: 18.9, mean: 31.6, phase: 1.2, duration: "10s", dir: "left" },
+].map((wave) => ({ ...wave, d: wavePath(wave), width: wave.period * REPEATS }));
+
+function Chevron() {
     return (
-        <footer className="footer-container">
+        <svg className="footer__chevron" viewBox="0 0 12 8" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+            <path d="M1 1.5l5 5 5-5" />
+        </svg>
+    );
+}
 
-            {/* 2-Layer Smooth Animated Waves */}
-            <div className="wave-wrapper">
-                {/* Layer 1 (Back / Light Pink) */}
-                <svg className="wave-layer wave-back" viewBox="0 0 2880 120" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M0,20 C600,100 1800,0 2880,50 L2880,120 L0,120 Z" fill="#ebadd0"></path>
-                </svg>
+// Replace all placeholder text below with your own.
+// You need to write your own policy pages. Only show payment methods you really accept.
+export default function Footer({
+    // Optional badge image shown in the first column, e.g. { src: "https://res.cloudinary.com/...", alt: "..." }
+    badge = null,
+    helpTitle = "We are here to help",
+    helpText = "Tell customers how to reach you and what to expect.",
+    email = "hello@yourstore.com",
+    helpNote = " — add your support hours and reply time here.",
+    linksTitle = "Quick links",
+    links = [
+        { label: "Contact Information", href: "/contact" },
+        { label: "Legal Notice", href: "/legal-notice" },
+        { label: "Privacy Policy", href: "/privacy-policy" },
+        { label: "Refund Policy", href: "/refund-policy" },
+        { label: "Shipping Policy", href: "/shipping-policy" },
+        { label: "Terms of Sale", href: "/terms-of-sale" },
+        { label: "Terms of Service", href: "/terms-of-service" },
+    ],
+    countryLabel = "Country/region",
+    // Called whenever the country changes (detected or chosen), with the 2-letter code, e.g. "PK"
+    onCountryChange = () => { },
+    // Where your backend tells us the visitor's country (see the FastAPI route)
+    countryApiUrl = "/api/country",
+    // Add your own image for each method: { name: "Visa", src: "https://res.cloudinary.com/..." }
+    payments = [
+        { name: "Visa", src: "" },
+        { name: "Mastercard", src: "" },
+        { name: "American Express", src: "" },
+        { name: "Apple Pay", src: "" },
+        { name: "Google Pay", src: "" },
+    ],
+    storeName = "Your Store Name",
+    address = "Your business address",
+}) {
+    const selectId = useId();
+    const year = new Date().getFullYear();
 
-                {/* Layer 2 (Front / Main Pink) */}
-                <svg className="wave-layer wave-front" viewBox="0 0 2880 120" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M0,40 C600,120 1800,20 2880,70 L2880,120 L0,120 Z" fill="#d15d9e"></path>
-                </svg>
+    // Every country, A to Z, and the visitor's country (detected, or saved from last time)
+    const options = useMemo(() => buildCountryOptions(), []);
+    const [country, setCountry] = useCountry({ apiUrl: countryApiUrl });
+
+    // Tell the rest of your app about the country as soon as it is known or changes
+    useEffect(() => {
+        onCountryChange(country);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [country]);
+
+    return (
+        <footer className="footer">
+            <div className="footer__waves" aria-hidden="true">
+                {WAVES.map((wave) => (
+                    <svg
+                        key={wave.id}
+                        className={`footer__wave footer__wave--${wave.id} footer__wave--${wave.dir}`}
+                        style={{ "--wave-period": `${wave.period}px`, "--wave-duration": wave.duration }}
+                        width={wave.width}
+                        height={WAVE_HEIGHT}
+                        viewBox={`0 0 ${wave.width} ${WAVE_HEIGHT}`}
+                    >
+                        <path d={wave.d} />
+                    </svg>
+                ))}
             </div>
 
-            <div className="footer-content">
-                {/* Top 3 Columns - Applying the Layered Box Animation */}
-                <div className="footer-top">
-
-                    {/* Column 1: DMCA */}
-                    <div className="layered-box footer-col-dmca">
-                        <img
-                            src="https://res.cloudinary.com/demo/image/upload/v1/dmca-badge-placeholder.png"
-                            alt="DMCA Protected"
-                            onError={(e) => { e.target.src = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAiIGhlaWdodD0iNDAiPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9IiMzMzMiLz48dGV4dCB4PSI1MCUiIHk9IjUwJSIgZmlsbD0iI2ZmZiIgZm9udC1mYW1pbHk9InNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTIiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGR5PSIuM2VtIj5ETUNBPC90ZXh0Pjwvc3ZnPg=='; }}
-                        />
-                        <div className="heart"></div>
+            <div className="footer__body">
+                <div className="footer__top">
+                    <div className="footer__badge">
+                        {badge && <img src={badge.src} alt={badge.alt || ""} width="96" />}
                     </div>
 
-                    {/* Column 2: Help */}
-                    <div className="layered-box footer-col-help">
-                        <h3>We're Here to Help</h3>
-                        <p>Questions before or after your order? A real person will answer you.</p>
-                        <p>
-                            <a href="mailto:contact@saybeam.com" className="email-link">contact@saybeam.com</a> — Mon to Sun, 9 AM–7 PM · reply within 24h.
+                    <div className="footer__col">
+                        <h2 className="footer__heading">{helpTitle}</h2>
+                        <p className="footer__text">
+                            {helpText}
+                            <br />
+                            <a className="footer__email" href={`mailto:${email}`}>
+                                {email}
+                            </a>
+                            {helpNote}
                         </p>
-                        <div className="heart"></div>
                     </div>
 
-                    {/* Column 3: Links */}
-                    <div className="layered-box footer-col-links">
-                        <h3>Quick links</h3>
-                        <ul>
-                            <li><a href="#contact">Contact Information</a></li>
-                            <li><a href="#legal">Legal Notice</a></li>
-                            <li><a href="#privacy">Privacy Policy</a></li>
-                            <li><a href="#refund">Refund Policy</a></li>
-                            <li><a href="#shipping">Shipping Policy</a></li>
-                            <li><a href="#terms-sale">Terms of Sale</a></li>
-                            <li><a href="#terms-service">Terms of Service</a></li>
+                    <nav className="footer__col" aria-label="Footer">
+                        <h2 className="footer__heading">{linksTitle}</h2>
+                        <ul className="footer__links">
+                            {links.map((link) => (
+                                <li key={link.href}>
+                                    <a href={link.href}>{link.label}</a>
+                                </li>
+                            ))}
                         </ul>
-                        <div className="heart"></div>
-                    </div>
-
+                    </nav>
                 </div>
 
-                {/* Bottom Section */}
-                <div className="footer-bottom">
+                <hr className="footer__divider" />
 
-                    {/* Country Selector */}
-                    <div className="country-selector">
-                        <label htmlFor="country">Country/region</label>
-                        <select id="country" className="country-dropdown">
-                            <option value="PK">Pakistan (PKR Rs)</option>
-                            <option value="US">United States (USD $)</option>
-                            <option value="UK">United Kingdom (GBP £)</option>
-                        </select>
+                <div className="footer__bottom">
+                    <div className="footer__bottom-row">
+                        <div className="footer__country">
+                            <label className="footer__country-label" htmlFor={selectId}>
+                                {countryLabel}
+                            </label>
+                            <div className="footer__select-wrap">
+                                <select
+                                    id={selectId}
+                                    className="footer__select"
+                                    value={country}
+                                    onChange={(e) => setCountry(e.target.value)}
+                                >
+                                    {options.map((option) => (
+                                        <option key={option.code} value={option.code}>
+                                            {option.label}
+                                        </option>
+                                    ))}
+                                </select>
+                                <Chevron />
+                            </div>
+                        </div>
+
+                        <ul className="footer__payments">
+                            {payments.map((method) => (
+                                <li key={method.name} className="footer__payment" title={method.name}>
+                                    {method.src && <img src={method.src} alt={method.name} width="38" height="24" />}
+                                </li>
+                            ))}
+                        </ul>
                     </div>
 
-                    {/* Payment Icons */}
-                    <div className="payment-icons">
-                        <img src="https://res.cloudinary.com/demo/image/upload/v1/alipay.png" alt="Alipay" onError={(e) => { e.target.src = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MCIgaGVpZ2h0PSIyOCI+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0iIzE2N2ZmZiIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBmaWxsPSIjZmZmIiBmb250LWZhbWlseT0ic2Fucy1zZXJpZiIgZm9udC1zaXplPSI4IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iLjNlbSI+YWxpcGF5PC90ZXh0Pjwvc3ZnPg=='; }} />
-                        <img src="https://res.cloudinary.com/demo/image/upload/v1/amex.png" alt="Amex" onError={(e) => { e.target.src = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MCIgaGVpZ2h0PSIyOCI+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0iIzAwN2JjYyIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBmaWxsPSIjZmZmIiBmb250LWZhbWlseT0ic2Fucy1zZXJpZiIgZm9udC1zaXplPSI4IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iLjNlbSI+QU1FWDwvdGV4dD48L3N2Zz4='; }} />
-                        <img src="https://res.cloudinary.com/demo/image/upload/v1/applepay.png" alt="Apple Pay" onError={(e) => { e.target.src = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MCIgaGVpZ2h0PSIyOCI+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0iIzAwMCIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBmaWxsPSIjZmZmIiBmb250LWZhbWlseT0ic2Fucy1zZXJpZiIgZm9udC1zaXplPSI4IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iLjNlbSI+UGF5PC90ZXh0Pjwvc3ZnPg=='; }} />
-                        <img src="https://res.cloudinary.com/demo/image/upload/v1/bank.png" alt="Bank" onError={(e) => { e.target.src = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MCIgaGVpZ2h0PSIyOCI+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0iI2YyZjJmMiIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBmaWxsPSIjMzMzIiBmb250LWZhbWlseT0ic2Fucy1zZXJpZiIgZm9udC1zaXplPSI4IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iLjNlbSI+QmFuazwvdGV4dD48L3N2Zz4='; }} />
-                        <img src="https://res.cloudinary.com/demo/image/upload/v1/diners.png" alt="Diners Club" onError={(e) => { e.target.src = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MCIgaGVpZ2h0PSIyOCI+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0iIzAwNzlhNSIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBmaWxsPSIjZmZmIiBmb250LWZhbWlseT0ic2Fucy1zZXJpZiIgZm9udC1zaXplPSI4IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iLjNlbSI+RElORVJTPC90ZXh0Pjwvc3ZnPg=='; }} />
-                        <img src="https://res.cloudinary.com/demo/image/upload/v1/discover.png" alt="Discover" onError={(e) => { e.target.src = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MCIgaGVpZ2h0PSIyOCI+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0iI2ZmNjYwMCIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBmaWxsPSIjZmZmIiBmb250LWZhbWlseT0ic2Fucy1zZXJpZiIgZm9udC1zaXplPSI4IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iLjNlbSI+RElTQzwvdGV4dD48L3N2Zz4='; }} />
-                        <img src="https://res.cloudinary.com/demo/image/upload/v1/gpay.png" alt="Google Pay" onError={(e) => { e.target.src = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MCIgaGVpZ2h0PSIyOCI+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0iI2ZmZiIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBmaWxsPSIjMzMzIiBmb250LWZhbWlseT0ic2Fucy1zZXJpZiIgZm9udC1zaXplPSI4IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iLjNlbSI+R1BheTwvdGV4dD48L3N2Zz4='; }} />
-                        <img src="https://res.cloudinary.com/demo/image/upload/v1/mastercard.png" alt="Mastercard" onError={(e) => { e.target.src = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MCIgaGVpZ2h0PSIyOCI+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0iIzAwMCIvPjxjaXJjbGUgY3g9IjE1IiBjeT0iMTQiIHI9IjgiIGZpbGw9IiNlYjAwMWIiLz48Y2lyY2xlIGN4PSIyNSIgY3k9IjE0IiByPSI4IiBmaWxsPSIjZjY5ZjFkIi8+PC9zdmc+'; }} />
-                        <img src="https://res.cloudinary.com/demo/image/upload/v1/maestro.png" alt="Maestro" onError={(e) => { e.target.src = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MCIgaGVpZ2h0PSIyOCI+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0iIzAwMCIvPjxjaXJjbGUgY3g9IjE1IiBjeT0iMTQiIHI9IjgiIGZpbGw9IiMwMDQ1N2UiLz48Y2lyY2xlIGN4PSIyNSIgY3k9IjE0IiByPSI4IiBmaWxsPSIjZWIwMDFiIi8+PC9zdmc+'; }} />
-                        <img src="https://res.cloudinary.com/demo/image/upload/v1/paypal.png" alt="PayPal" onError={(e) => { e.target.src = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MCIgaGVpZ2h0PSIyOCI+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0iIzAwM2Y4MSIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBmaWxsPSIjZmZmIiBmb250LWZhbWlseT0ic2Fucy1zZXJpZiIgZm9udC1zaXplPSI4IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iLjNlbSI+UGF5UGFsPC90ZXh0Pjwvc3ZnPg=='; }} />
-                        <img src="https://res.cloudinary.com/demo/image/upload/v1/shop.png" alt="Shop Pay" onError={(e) => { e.target.src = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MCIgaGVpZ2h0PSIyOCI+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0iIzVhMzFmMCIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBmaWxsPSIjZmZmIiBmb250LWZhbWlseT0ic2Fucy1zZXJpZiIgZm9udC1zaXplPSI4IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iLjNlbSI+U2hvcDwvdGV4dD48L3N2Zz4='; }} />
-                        <img src="https://res.cloudinary.com/demo/image/upload/v1/visa.png" alt="Visa" onError={(e) => { e.target.src = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MCIgaGVpZ2h0PSIyOCI+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0iIzFhMWY3MSIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBmaWxsPSIjZmZmIiBmb250LWZhbWlseT0ic2Fucy1zZXJpZiIgZm9udC1zaXplPSIxMCIgZm9udC13ZWlnaHQ9ImJvbGQiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGR5PSIuM2VtIj5WSVNIPC90ZXh0Pjwvc3ZnPg=='; }} />
-                    </div>
-                </div>
-
-                {/* Copyright Text */}
-                <div className="copyright">
-                    © 2026, Saybeam AXELORN GROUP LLC – 33N Gould St – Sheridan – WY – 82801 – USA
+                    <p className="footer__copy">
+                        © {year}, {storeName} - {address}
+                    </p>
                 </div>
             </div>
         </footer>
     );
-};
-
-export default Footer;
+}

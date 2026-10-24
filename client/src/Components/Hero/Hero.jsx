@@ -4,7 +4,7 @@ import "./Hero.css";
 //    Keep "c_fill,ar_4:5,w_760,f_auto,q_auto" in it: it crops the image to the
 //    right shape and serves a small, modern file format automatically.
 const HERO_IMAGE =
-    "https://res.cloudinary.com/YOUR_CLOUD_NAME/image/upload/c_fill,ar_4:5,w_760,f_auto,q_auto/YOUR_IMAGE.jpg";
+    "https://res.cloudinary.com/fozdhxik/image/upload/f_auto/q_auto/avis-02-blonde30-nude-hold-ALT.png";
 
 function CheckIcon() {
     return (
