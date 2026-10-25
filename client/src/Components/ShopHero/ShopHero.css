@@ -670,23 +670,24 @@ video.sh-media {
 }
 
 .sh-pay {
+    list-style: none;
     margin: 16px 0 20px;
+    padding: 0;
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    gap: 7px;
+    gap: 8px 8px;
 }
 
-.sh-pay span {
-    min-width: 30px;
-    padding: 3px 8px;
-    text-align: center;
-    font-size: .56em;
-    font-weight: 600;
-    color: #333;
-    border: 1px solid #e3e3e3;
-    border-radius: 4px;
-    background: #fff;
+.sh-pay li {
+    display: block;
+    line-height: 0;
+}
+
+.sh-pay svg {
+    display: block;
+    width: 38px;
+    height: 24px;
 }
 
 .sh-h3 {
@@ -746,7 +747,8 @@ video.sh-media {
     color: #666;
 }
 
-.sh-review p b {
+.sh-review p b,
+.sh-review p strong {
     color: var(--text);
     font-weight: 700;
 }
@@ -816,6 +818,7 @@ video.sh-media {
 }
 
 .sh-wear video {
+    display: block;
     width: 100%;
     aspect-ratio: 1 / 1;
     object-fit: cover;
@@ -870,7 +873,6 @@ video.sh-media {
     color: red;
     font-size: 1.4em;
 }
-
 
 .sh-faq-a {
     display: grid;
