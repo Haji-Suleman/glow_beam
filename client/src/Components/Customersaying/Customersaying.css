@@ -1,0 +1,226 @@
+@import url("https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Poppins:wght@600;700;800&display=swap");
+
+.cs-section {
+    --cs-accent: #b4527c;
+    --cs-dark: #1a1a1a;
+    --cs-body: #555555;
+
+    background: #ffffff;
+    padding: 110px 24px 120px;
+    box-sizing: border-box;
+}
+
+.cs-section *,
+.cs-section *::before,
+.cs-section *::after {
+    box-sizing: border-box;
+}
+
+/* ---------- Header ---------- */
+.cs-header {
+    text-align: center;
+    margin-bottom: 48px;
+}
+
+.cs-kicker {
+    margin: 0 0 8px;
+    font-family: "Poppins", sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--cs-accent);
+}
+
+.cs-heading {
+    margin: 0;
+    font-family: "Poppins", sans-serif;
+    font-size: 32px;
+    font-weight: 700;
+    line-height: 1.25;
+    letter-spacing: -0.01em;
+    color: var(--cs-dark);
+}
+
+/* ---------- Rows ---------- */
+.cs-list {
+    max-width: 1160px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 48px;
+}
+
+.cs-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 52px;
+    align-items: center;
+}
+
+/* Alternate rows: image on the right, text on the left */
+.cs-row--reverse .cs-media {
+    order: 2;
+}
+
+.cs-row--reverse .cs-content {
+    order: 1;
+}
+
+/* ---------- Media ---------- */
+.cs-media {
+    width: 100%;
+    border-radius: 32px;
+    overflow: hidden;
+    background: #f4eef1;
+    box-shadow: 0 20px 60px rgba(180, 82, 124, 0.12);
+}
+
+.cs-media--square {
+    aspect-ratio: 1 / 1;
+}
+
+.cs-media--portrait {
+    aspect-ratio: 9 / 16;
+}
+
+.cs-media--landscape {
+    aspect-ratio: 4 / 3;
+}
+
+.cs-video {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* ---------- Text ---------- */
+.cs-content {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.cs-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    margin-bottom: 14px;
+    border-radius: 50%;
+    background: var(--cs-accent);
+    color: #ffffff;
+    font-family: "Poppins", sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+}
+
+.cs-eyebrow {
+    margin: 0 0 6px;
+    font-family: "Poppins", sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--cs-accent);
+}
+
+.cs-title {
+    margin: 0 0 14px;
+    font-family: "Poppins", sans-serif;
+    font-size: 30px;
+    font-weight: 700;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+    color: var(--cs-dark);
+}
+
+.cs-text {
+    margin: 0;
+    max-width: 555px;
+    font-family: "Lato", sans-serif;
+    font-size: 17px;
+    font-weight: 400;
+    line-height: 1.85;
+    letter-spacing: 0.05em;
+    color: var(--cs-body);
+}
+
+/* ---------- Tablet ---------- */
+@media (max-width: 1024px) {
+    .cs-section {
+        padding: 80px 24px 90px;
+    }
+
+    .cs-row {
+        column-gap: 32px;
+    }
+
+    .cs-heading {
+        font-size: 28px;
+    }
+
+    .cs-title {
+        font-size: 24px;
+    }
+
+    .cs-text {
+        font-size: 15px;
+    }
+}
+
+/* ---------- Mobile ---------- */
+@media (max-width: 768px) {
+    .cs-section {
+        padding: 56px 20px 64px;
+    }
+
+    .cs-header {
+        margin-bottom: 32px;
+    }
+
+    .cs-kicker {
+        font-size: 11px;
+    }
+
+    .cs-heading {
+        font-size: 24px;
+    }
+
+    .cs-list {
+        gap: 40px;
+    }
+
+    .cs-row {
+        grid-template-columns: 1fr;
+        row-gap: 22px;
+    }
+
+    /* image always on top on mobile */
+    .cs-row--reverse .cs-media,
+    .cs-media {
+        order: 1;
+        border-radius: 24px;
+    }
+
+    .cs-row--reverse .cs-content,
+    .cs-content {
+        order: 2;
+    }
+
+    .cs-media--portrait {
+        aspect-ratio: 3 / 4;
+    }
+
+    .cs-title {
+        font-size: 22px;
+    }
+
+    .cs-text {
+        font-size: 15px;
+        line-height: 1.75;
+    }
+}

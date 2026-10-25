@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import './BestSeller.css';
 import CustomerService from '../../Components/CustomerService/Customerservice';
 import Footer from '../../Components/Footer/Footer';
-import Navbar from '../../Components/Navbar/Nabar';
+import Navbar from '../../Components/Navbar/Navbar';
 
 const BestSeller = () => {
     const [isAvailabilityOpen, setIsAvailabilityOpen] = useState(false);

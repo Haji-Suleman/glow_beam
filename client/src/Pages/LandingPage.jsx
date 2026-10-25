@@ -1,5 +1,5 @@
 import React from 'react'
-import Navbar from '../Components/Navbar/Nabar'
+import Navbar from '../Components/Navbar/Navbar'
 import Hero from '../Components/Hero/Hero'
 import Benefits from '../Components/Benefits/Benefits'
 import CallToAction from '../Components/Calltoaction/Calltoaction'

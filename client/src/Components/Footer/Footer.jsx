@@ -2,6 +2,7 @@ import { useEffect, useId, useMemo } from "react";
 import { buildCountryOptions } from "../../Store/Country/Countries.js";
 import useCountry from "../../Store/Country/UseCountry.js";
 import "./Footer.css";
+import { PAYMENTS } from "../ShopHero/ShopHero.jsx";
 
 /* ---------- Animated waves at the top of the footer ----------
    Three layers drawn as sine waves. Each one is wider than the screen and
@@ -56,13 +57,7 @@ export default function Footer({
     // Where your backend tells us the visitor's country (see the FastAPI route)
     countryApiUrl = "/api/country",
     // Add your own image for each method: { name: "Visa", src: "https://res.cloudinary.com/..." }
-    payments = [
-        { name: "Visa", src: "" },
-        { name: "Mastercard", src: "" },
-        { name: "American Express", src: "" },
-        { name: "Apple Pay", src: "" },
-        { name: "Google Pay", src: "" },
-    ],
+
     storeName = "Your Store Name",
     address = "Your business address",
 }) {
@@ -152,9 +147,11 @@ export default function Footer({
                         </div>
 
                         <ul className="footer__payments">
-                            {payments.map((method) => (
-                                <li key={method.name} className="footer__payment" title={method.name}>
-                                    {method.src && <img src={method.src} alt={method.name} width="38" height="24" />}
+                            {PAYMENTS.map((method) => (
+                                <li key={method.name} className="footer__paymnt" title={method.name}>
+                                    {method.svg && (
+                                        <div dangerouslySetInnerHTML={{ __html: method.svg }} />
+                                    )}
                                 </li>
                             ))}
                         </ul>

@@ -2,7 +2,7 @@ import React from 'react';
 import './About.css';
 import Footer from '../../Components/Footer/Footer';
 import CustomerService from '../../Components/CustomerService/Customerservice';
-import Navbar from '../../Components/Navbar/Nabar';
+import Navbar from '../../Components/Navbar/Navbar';
 
 const About = () => {
     return (

@@ -1,9 +1,8 @@
 import React from 'react';
-import './Touch.css';
+import './Contact.css';
 import CustomerService from '../../Components/CustomerService/Customerservice';
 import Footer from '../../Components/Footer/Footer';
-import Navbar from '../../Components/Navbar/Nabar';
-
+import Navbar from '../../Components/Navbar/Navbar';
 const Contact = () => {
     return (
         <>
