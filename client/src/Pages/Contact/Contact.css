@@ -2,7 +2,6 @@
 .contact-section {
     background-color: #ffffff;
     padding: 80px 20px;
-    /* Adjust top/bottom padding as needed */
     display: flex;
     justify-content: center;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
@@ -11,7 +10,6 @@
 .contact-container {
     width: 100%;
     max-width: 800px;
-    /* Controls the width of the form */
 }
 
 /* Heading */
@@ -19,7 +17,6 @@
     text-align: center;
     font-size: 2.5rem;
     font-weight: 800;
-    /* Extra bold */
     color: #1a1a1a;
     margin-bottom: 40px;
     letter-spacing: -0.5px;
@@ -30,17 +27,25 @@
     display: flex;
     flex-direction: column;
     gap: 20px;
-    /* Space between rows */
 }
 
 .form-row {
     display: flex;
+    flex-direction: column;
+    /* Fixes the inline message issue by stacking */
     width: 100%;
 }
 
 .split-row {
+    flex-direction: row;
     gap: 20px;
-    /* Space between Name and Email */
+}
+
+/* Ensures the form-fields in split-row grow equally */
+.split-row .form-field {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
 }
 
 /* Inputs and Textareas */
@@ -50,11 +55,8 @@
     font-size: 1rem;
     color: #333333;
     background-color: #fdf8f9;
-    /* Very light pink background */
     border: 1px solid #ebd3da;
-    /* Light pink border */
     border-radius: 6px;
-    /* Slightly rounded corners */
     box-sizing: border-box;
     outline: none;
     transition: border-color 0.2s ease, box-shadow 0.2s ease;
@@ -66,16 +68,26 @@
     opacity: 1;
 }
 
-/* Focus states for accessibility and polish */
 .form-input:focus {
     border-color: #d1889e;
     box-shadow: 0 0 0 3px rgba(209, 136, 158, 0.1);
 }
 
+/* Error State */
+.form-input.invalid {
+    border-color: #e74c3c;
+    background-color: #fdf0ef;
+}
+
+.form-error {
+    color: #e74c3c;
+    font-size: 0.85rem;
+    margin: 6px 0 0 4px;
+}
+
 /* Textarea specific styling */
 .form-textarea {
     resize: vertical;
-    /* Allow user to resize vertically only */
     min-height: 100px;
 }
 
@@ -91,19 +103,111 @@
     font-weight: 700;
     color: #ffffff;
     background-color: #c4547e;
-    /* Solid mauve/pink */
     border: none;
     border-radius: 6px;
     cursor: pointer;
     transition: background-color 0.2s ease;
     text-align: center;
     margin-top: 10px;
-    /* Extra space above the button */
 }
 
 .send-button:hover {
     background-color: #b0456e;
-    /* Slightly darker on hover */
+}
+
+.send-button:disabled {
+    background-color: #d4a1b4;
+    cursor: not-allowed;
+}
+
+/* ---------------------------------------------------------------------------
+   Toast Notification Styles
+--------------------------------------------------------------------------- */
+.toast {
+    position: fixed;
+    top: 24px;
+    right: 24px;
+    min-width: 300px;
+    max-width: 400px;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 20px;
+    z-index: 9999;
+    animation: slideIn 0.3s ease-out forwards;
+    border-left: 6px solid;
+}
+
+.toast-content {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.toast-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    color: #fff;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.toast p {
+    margin: 0;
+    font-size: 0.95rem;
+    color: #333;
+}
+
+.toast-close {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    color: #999;
+    cursor: pointer;
+    padding: 0;
+    margin-left: 12px;
+    line-height: 1;
+}
+
+.toast-close:hover {
+    color: #333;
+}
+
+/* Success Toast */
+.toast-success {
+    border-left-color: #2ecc71;
+}
+
+.toast-success .toast-icon {
+    background-color: #2ecc71;
+}
+
+/* Error Toast */
+.toast-error {
+    border-left-color: #e74c3c;
+}
+
+.toast-error .toast-icon {
+    background-color: #e74c3c;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
 }
 
 /* Responsive adjustments */
@@ -115,5 +219,13 @@
 
     .contact-title {
         font-size: 2rem;
+    }
+
+    .toast {
+        top: 16px;
+        right: 16px;
+        left: 16px;
+        min-width: unset;
+        max-width: unset;
     }
 }

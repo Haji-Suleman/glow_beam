@@ -1,0 +1,466 @@
+@import url("https://fonts.googleapis.com/css2?family=Bodoni+Moda:wght@400;600&family=Oswald:wght@600;700&family=Playfair+Display:wght@800&family=Poppins:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap");
+
+.sbr {
+    --pink: #b9527f;
+    --pink-light: #ead3dd;
+    --star: #f5a623;
+    --ink: #1c1c1c;
+
+    font-family: "Poppins", system-ui, -apple-system, "Segoe UI", sans-serif;
+    color: var(--ink);
+    background: #fff;
+    padding: 36px 0 90px;
+    overflow-x: clip;
+}
+
+.sbr *,
+.sbr *::before,
+.sbr *::after {
+    box-sizing: border-box;
+}
+
+/* =========================================================
+   PRESS LOGO MARQUEE
+========================================================= */
+.sbr-press {
+    overflow: hidden;
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+    mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+}
+
+.sbr-track {
+    display: flex;
+    width: max-content;
+    animation: sbr-marquee 38s linear infinite;
+}
+
+.sbr-press:hover .sbr-track {
+    animation-play-state: paused;
+}
+
+.sbr-group {
+    display: flex;
+    align-items: center;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    flex: none;
+}
+
+.sbr-logo-item {
+    flex: none;
+    width: 160px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 44px;
+}
+
+.sbr-logo-img {
+    height: 30px;
+    width: auto;
+    max-width: 130px;
+    object-fit: contain;
+}
+
+/* text fallbacks until you add real logo files */
+.sbr-logo {
+    white-space: nowrap;
+    line-height: 1;
+}
+
+.sbr-logo--forbes {
+    font-family: "Playfair Display", serif;
+    font-weight: 800;
+    font-size: 30px;
+    letter-spacing: -1px;
+}
+
+.sbr-logo--cosmo {
+    font-family: "Oswald", sans-serif;
+    font-weight: 700;
+    font-size: 26px;
+    letter-spacing: -1.5px;
+    color: #f0128c;
+}
+
+.sbr-logo--marie {
+    font-family: "Poppins", sans-serif;
+    font-weight: 700;
+    font-size: 22px;
+    letter-spacing: -1px;
+}
+
+.sbr-logo--elle {
+    font-family: "Bodoni Moda", serif;
+    font-weight: 400;
+    font-size: 32px;
+    letter-spacing: 7px;
+    padding-left: 7px;
+}
+
+.sbr-logo--vogue {
+    font-family: "Bodoni Moda", serif;
+    font-weight: 600;
+    font-size: 34px;
+    letter-spacing: -1px;
+}
+
+@keyframes sbr-marquee {
+    from {
+        transform: translateX(0);
+    }
+
+    to {
+        transform: translateX(-50%);
+    }
+}
+
+/* =========================================================
+   REVIEWS
+========================================================= */
+.sbr-reviews {
+    margin-top: 112px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0 16px;
+}
+
+.sbr-title {
+    margin: 0 0 20px;
+    font-size: 24px;
+    line-height: 1.3;
+    font-weight: 700;
+    letter-spacing: 0.4px;
+    text-align: center;
+}
+
+.sbr-swiper {
+    width: 100%;
+    max-width: 470px;
+}
+
+.sbr-swiper .swiper-slide {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* videos */
+.sbr-videos {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+}
+
+.sbr-video {
+    width: 147px;
+    aspect-ratio: 9 / 16;
+    border-radius: 14px;
+    overflow: hidden;
+    background: #eee;
+    flex: none;
+    transition: transform 0.35s ease, box-shadow 0.35s ease;
+}
+
+.sbr-video:hover {
+    transform: translateY(-4px) scale(1.02);
+    box-shadow: 0 12px 26px rgba(185, 82, 127, 0.22);
+}
+
+.sbr-video video,
+.sbr-video img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.sbr-video-ph {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(160deg, #f1dfe6, #e4c4d1);
+}
+
+/* copy */
+.sbr-copy {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    margin-top: 18px;
+}
+
+.sbr-stars {
+    font-size: 16px;
+    letter-spacing: 3px;
+    line-height: 1;
+    color: var(--pink-light);
+    margin-bottom: 10px;
+}
+
+.sbr-stars .is-on {
+    color: var(--star);
+}
+
+.sbr-review-title {
+    margin: 0 0 8px;
+    font-size: 20px;
+    line-height: 1.3;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+}
+
+.sbr-quote {
+    margin: 0 0 12px;
+    max-width: 420px;
+    font-size: 15px;
+    line-height: 1.5;
+    font-style: italic;
+    letter-spacing: 0.6px;
+    color: #444;
+}
+
+.sbr-name {
+    margin: 0;
+    font-size: 14px;
+    letter-spacing: 0.8px;
+    color: #8a8a8a;
+}
+
+/* controls */
+.sbr-controls {
+    margin-top: 19px;
+    display: flex;
+    align-items: center;
+    gap: 18px;
+}
+
+.sbr-arrow {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    border: 1.5px solid var(--pink);
+    font-family: inherit;
+    font-size: 22px;
+    line-height: 1;
+    padding: 0 0 3px;
+    cursor: pointer;
+    display: grid;
+    place-items: center;
+    transition: transform 0.15s ease, background 0.2s ease, color 0.2s ease;
+}
+
+.sbr-arrow--prev {
+    background: #fff;
+    color: var(--pink);
+}
+
+.sbr-arrow--next {
+    background: var(--pink);
+    color: #fff;
+}
+
+.sbr-arrow:hover {
+    transform: translateY(-2px);
+}
+
+.sbr-arrow--prev:hover {
+    background: var(--pink);
+    color: #fff;
+}
+
+.sbr-arrow:active {
+    transform: scale(0.94);
+}
+
+.sbr-arrow:focus-visible,
+.sbr-dot:focus-visible,
+.sbr-cta:focus-visible {
+    outline: 3px solid var(--ink);
+    outline-offset: 3px;
+}
+
+.sbr-dots {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+}
+
+.sbr-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    border: 0;
+    padding: 0;
+    background: var(--pink-light);
+    cursor: pointer;
+    transition: background 0.25s ease, transform 0.25s ease;
+}
+
+.sbr-dot.is-active {
+    background: var(--pink);
+    transform: scale(1.15);
+}
+
+/* =========================================================
+   CTA
+========================================================= */
+.sbr-cta-wrap {
+    display: flex;
+    justify-content: center;
+    margin-top: 135px;
+}
+
+.sbr-cta {
+    position: relative;
+    overflow: hidden;
+    height: 57px;
+    padding: 0 30px;
+    min-width: 232px;
+    background: var(--pink);
+    color: #fff;
+    border: 0;
+    border-radius: 6px;
+    font-family: inherit;
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    animation: sbr-pulse 2.8s ease-in-out infinite;
+    transition: transform 0.15s ease;
+}
+
+.sbr-cta::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -60%;
+    width: 40%;
+    height: 100%;
+    background: linear-gradient(100deg, transparent, rgba(255, 255, 255, 0.35), transparent);
+    transform: skewX(-20deg);
+    animation: sbr-shine 4s ease-in-out infinite;
+}
+
+.sbr-cta:hover {
+    transform: translateY(-2px);
+}
+
+@keyframes sbr-pulse {
+
+    0%,
+    100% {
+        box-shadow: 0 0 0 0 rgba(185, 82, 127, 0.45);
+    }
+
+    50% {
+        box-shadow: 0 0 0 12px rgba(185, 82, 127, 0);
+    }
+}
+
+@keyframes sbr-shine {
+
+    0%,
+    55% {
+        left: -60%;
+    }
+
+    100% {
+        left: 140%;
+    }
+}
+
+/* =========================================================
+   ENTRANCE ANIMATIONS
+========================================================= */
+@keyframes sbr-rise {
+    from {
+        opacity: 0;
+        transform: translateY(22px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* heading + slider + controls reveal when scrolled into view */
+.sbr-reviews .sbr-title,
+.sbr-reviews .sbr-swiper,
+.sbr-reviews .sbr-controls {
+    opacity: 0;
+}
+
+.sbr-reviews[data-in="true"] .sbr-title {
+    animation: sbr-rise 0.6s ease both;
+}
+
+.sbr-reviews[data-in="true"] .sbr-swiper {
+    animation: sbr-rise 0.7s ease 0.12s both;
+}
+
+.sbr-reviews[data-in="true"] .sbr-controls {
+    animation: sbr-rise 0.6s ease 0.35s both;
+}
+
+/* every time a slide becomes active: videos pop in, text follows */
+.sbr-swiper .swiper-slide-active .sbr-video {
+    animation: sbr-rise 0.6s ease both;
+    animation-delay: calc(var(--i) * 90ms);
+}
+
+.sbr-swiper .swiper-slide-active .sbr-copy>* {
+    animation: sbr-rise 0.55s ease both;
+}
+
+.sbr-swiper .swiper-slide-active .sbr-copy> :nth-child(1) {
+    animation-delay: 0.25s;
+}
+
+.sbr-swiper .swiper-slide-active .sbr-copy> :nth-child(2) {
+    animation-delay: 0.32s;
+}
+
+.sbr-swiper .swiper-slide-active .sbr-copy> :nth-child(3) {
+    animation-delay: 0.39s;
+}
+
+.sbr-swiper .swiper-slide-active .sbr-copy> :nth-child(4) {
+    animation-delay: 0.46s;
+}
+
+/* =========================================================
+   RESPONSIVE + REDUCED MOTION
+========================================================= */
+@media (max-width: 520px) {
+    .sbr-reviews {
+        margin-top: 70px;
+    }
+
+    .sbr-video {
+        width: calc((100vw - 48px) / 3);
+    }
+
+    .sbr-cta-wrap {
+        margin-top: 80px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    .sbr *,
+    .sbr *::before,
+    .sbr *::after {
+        animation: none !important;
+        transition: none !important;
+    }
+
+    .sbr-reviews .sbr-title,
+    .sbr-reviews .sbr-swiper,
+    .sbr-reviews .sbr-controls {
+        opacity: 1;
+    }
+}

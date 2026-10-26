@@ -8,7 +8,7 @@ const FEATURES = [
         eyebrow: "The second you put it on",
         title: "A flatter stomach, instantly.",
         text: "The high waist wraps your belly and waistline in gentle, targeted compression, so you see a smoother, more sculpted shape the moment you pull it on. No squeezing. No pinching. No discomfort.",
-        video: "/videos/sculpt-1.mp4",
+        video: "https://res.cloudinary.com/fozdhxik/video/upload/v1792997132/11d864d282424e1bad0732f53a43d24a.mp4",
         ratio: "square",
     },
     {
@@ -16,7 +16,7 @@ const FEATURES = [
         eyebrow: "Invisible under everything",
         title: "Disappears under your clothes.",
         text: "Seamless edges mean no lines, no marks, no telltale shapewear bulge. Tight dress, slim jeans, leggings, it vanishes. Just a smooth, natural shape that still looks like you.",
-        video: "/videos/sculpt-2.mp4",
+        video: "https://res.cloudinary.com/fozdhxik/video/upload/v1792997110/bf38479a360f46debae515ffc18934e1.mp4",
         ratio: "portrait",
     },
     {
@@ -24,7 +24,7 @@ const FEATURES = [
         eyebrow: "All-day hold",
         title: "It never rolls down. Ever.",
         text: "The soft, breathable fabric hugs your body and stays exactly where you put it. No rolling, no sliding, no readjusting in the bathroom. Put it on in the morning and forget it's there until night.",
-        video: "/videos/sculpt-3.mp4",
+        video: "https://res.cloudinary.com/fozdhxik/video/upload/v1792923851/e1daf45fa99a4960af6821b1ab1f9f30.mp4",
         ratio: "landscape",
     },
 ];

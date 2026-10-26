@@ -1,0 +1,229 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap");
+
+.sbc {
+    --sbc-pink: #b9527f;
+    --sbc-pink-border: #b0507a;
+    --sbc-pink-soft: #fdf3f6;
+    --sbc-pink-soft-border: #f3d9e3;
+    --sbc-ink: #1c1c1c;
+    --sbc-muted: #7a7a7a;
+    --sbc-line: #e9e9e9;
+    --sbc-red: #d64550;
+
+    font-family: "Poppins", system-ui, -apple-system, "Segoe UI", sans-serif;
+    color: var(--sbc-ink);
+    background: #fff;
+    padding: 0 20px 60px;
+    box-sizing: border-box;
+}
+
+.sbc *,
+.sbc *::before,
+.sbc *::after {
+    box-sizing: border-box;
+}
+
+/* ---------- CTA ---------- */
+.sbc-cta-wrap {
+    display: flex;
+    justify-content: center;
+    padding-top: 0;
+}
+
+.sbc-cta {
+    background: var(--sbc-pink);
+    color: #fff;
+    border: 0;
+    border-radius: 6px;
+    height: 58px;
+    padding: 0 38px;
+    font-family: inherit;
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: 0.4px;
+    cursor: pointer;
+    transition: filter 0.15s ease;
+}
+
+.sbc-cta:hover {
+    filter: brightness(1.06);
+}
+
+.sbc-cta:focus-visible {
+    outline: 3px solid #1c1c1c;
+    outline-offset: 3px;
+}
+
+/* ---------- Heading ---------- */
+.sbc-title {
+    margin: 130px 0 32px;
+    text-align: center;
+    font-size: 29px;
+    line-height: 1.25;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+}
+
+/* ---------- Cards ---------- */
+.sbc-grid {
+    max-width: 850px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 19px;
+}
+
+.sbc-card {
+    background: #fff;
+    border: 1px solid var(--sbc-line);
+    border-radius: 16px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.sbc-card--brand {
+    border: 1.5px solid var(--sbc-pink-border);
+}
+
+.sbc-img {
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    background: #d9b3ad;
+    /* placeholder tone until you add the image */
+    position: relative;
+}
+
+.sbc-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.sbc-body {
+    padding: 22px 20px 16px;
+}
+
+.sbc-card-title {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 0 0 14px;
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: 0.6px;
+}
+
+/* ---------- Lists ---------- */
+.sbc-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.sbc-list li {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 9px 0;
+    border-bottom: 1px solid var(--sbc-line);
+    font-size: 15px;
+    line-height: 1.4;
+    letter-spacing: 0.4px;
+    color: var(--sbc-muted);
+}
+
+.sbc-list li:last-child {
+    border-bottom: 0;
+}
+
+.sbc-list--brand li {
+    color: #3a3a3a;
+}
+
+.sbc-list--brand strong {
+    color: var(--sbc-ink);
+    font-weight: 700;
+}
+
+/* ---------- Icons ---------- */
+.sbc-icon {
+    flex: none;
+    fill: none;
+    stroke-width: 2.6;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.sbc-icon--x {
+    stroke: var(--sbc-red);
+    width: 18px;
+    height: 18px;
+}
+
+.sbc-icon--check {
+    stroke: var(--sbc-pink);
+    width: 18px;
+    height: 18px;
+}
+
+.sbc-list .sbc-icon {
+    width: 15px;
+    height: 15px;
+}
+
+/* ---------- Bottom note ---------- */
+.sbc-note {
+    max-width: 850px;
+    margin: 22px auto 0;
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    padding: 16px 20px;
+    background: var(--sbc-pink-soft);
+    border: 1px solid var(--sbc-pink-soft-border);
+    border-radius: 12px;
+}
+
+.sbc-note p {
+    margin: 0;
+    font-size: 15px;
+    line-height: 1.55;
+    letter-spacing: 0.3px;
+    color: #555;
+}
+
+.sbc-note strong {
+    color: var(--sbc-ink);
+    font-weight: 700;
+}
+
+.sbc-layers {
+    flex: none;
+    width: 24px;
+    height: 24px;
+    margin-top: 2px;
+    fill: none;
+    stroke: var(--sbc-pink);
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+/* ---------- Mobile ---------- */
+@media (max-width: 720px) {
+    .sbc-title {
+        margin-top: 70px;
+        font-size: 24px;
+    }
+
+    .sbc-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .sbc-cta {
+        font-size: 16px;
+        padding: 0 26px;
+    }
+}
