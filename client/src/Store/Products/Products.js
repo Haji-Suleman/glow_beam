@@ -1,0 +1,162 @@
+const CDN = 'https://saybeam.com/cdn/shop/files/';
+const img = (file, width = 1066) => `${CDN}${file}?width=${width}`;
+
+const SIZES = ['XS', 'S', 'M', 'L', 'XL', '2XL', '3XL'];
+
+export const PRODUCTS = [
+    {
+        id: 1,
+        slug: 'Glowbeam-sculpt-brief',
+        name: 'Glowbeam Sculpt Brief',
+        price: 11207.31,
+        created: 4,
+        colors: ['Beige', 'Fuchsia pink', 'Black'],
+        sizes: SIZES,
+        image: img('hf_20260901_132006_386d39af-1e77-4e65-97f6-16cc602a2872.png', 533),
+        hoverImage: img('05_diagram_62a6e59e-8b3d-4dea-8eee-324ca92cc6d5.png', 533),
+        gallery: [
+            img('hf_20260901_132006_386d39af-1e77-4e65-97f6-16cc602a2872.png'),
+            img('05_diagram_62a6e59e-8b3d-4dea-8eee-324ca92cc6d5.png'),
+        ],
+    },
+    {
+        id: 2,
+        slug: 'sculpt-leggings-stay-up',
+        name: 'Sculpt Leggings · Stay-Up',
+        price: 14016.16,
+        created: 3,
+        colors: ['Black', 'Beige', 'Dark Gray', 'Lavender', 'Turquoise', 'Fuchsia pink'],
+        sizes: ['S', 'M', 'L', 'XL', '2XL', '3XL'],
+        image: img('sculpt-leggings-02-features.jpg', 533),
+        hoverImage: img('sculpt-leggings-01-black.jpg', 533),
+        gallery: [
+            img('sculpt-leggings-02-features.jpg'),
+            img('sculpt-leggings-01-black.jpg'),
+            img('sculpt-leggings-09-every-body_83b15ade-fc85-4ddd-a6ab-f0ba08ef0ab4.jpg'),
+            img('sculpt-leggings-04-without-with_42a8922e-861a-41e8-982d-f9c33c884905.jpg'),
+            img('sculpt-leggings-05-turquoise_b46ced29-9be3-4a48-b1d9-f0a182af5c51.jpg'),
+            img('sculpt-leggings-06-fuchsia_fc1c2348-d08e-458a-91f6-1ab9c6067105.jpg'),
+            img('sculpt-leggings-08-squat-proof.jpg'),
+            img('sculpt-leggings-07-lavender_d107a67e-23e1-4f82-9e4d-0a6f0dbfb57c.jpg'),
+            img('sculpt-leggings-11-six-colors_18bd705a-78da-4a5c-bd45-fcbca390de91.jpg'),
+            img('sculpt-leggings-01-black-side_dad4351c-e216-4c16-ac1f-f52b7d6a9bca.jpg'),
+            img('sculpt-leggings-color-beige_88f6346b-b6c5-43aa-aae2-6ec79f22e0ad.jpg'),
+            img('sculpt-leggings-color-charcoal_6daff6d4-f15b-4011-8589-4d9997eea247.jpg'),
+            img('sculpt-leggings-color-fuchsia_e060a026-66ea-44c8-b9c1-170685221770.jpg'),
+            img('sculpt-leggings-color-lavender_8d85ea73-00f7-4005-bf51-0418813a1d3a.jpg'),
+            img('sculpt-leggings-color-turquoise_68c1ab63-8875-4839-ad75-7fa94f32c1e0.jpg'),
+        ],
+        // Gallery index to show when a color is picked (like the real site)
+        colorImages: {
+            'Black': 9,
+            'Beige': 10,
+            'Dark Gray': 11,
+            'Fuchsia pink': 12,
+            'Lavender': 13,
+            'Turquoise': 14,
+        },
+    },
+    {
+        id: 3,
+        slug: 'sculpt-shorts-no-ride-up',
+        name: 'Sculpt Shorts · No Ride-Up',
+        price: 11207.31,
+        created: 2,
+        colors: ['Black', 'Raspberry', 'Beige', 'Dark Gray', 'Light Gray', 'Sky Blue', 'Teal'],
+        sizes: SIZES,
+        image: img('sculpt-shorts-02-features.jpg', 533),
+        hoverImage: img('sculpt-shorts-06-teal_8becd308-9377-4b4e-8ffe-54bbb44f826e.jpg', 533),
+        gallery: [
+            img('sculpt-shorts-02-features.jpg'),
+            img('sculpt-shorts-06-teal_8becd308-9377-4b4e-8ffe-54bbb44f826e.jpg'),
+            img('sculpt-shorts-04-without-with.jpg'),
+            img('sculpt-shorts-09-squat-proof_15ba7ecf-a9fd-487d-b1d0-92fe40e6920e.jpg'),
+            img('sculpt-shorts-01-black.jpg'),
+            img('sculpt-shorts-07-skyblue_2bc441d0-e91d-491b-9a88-c8f7d98fe9c3.jpg'),
+            img('sculpt-shorts-08-lightgray_186375dd-32bd-45aa-bc28-2d4979fa8aed.jpg'),
+            img('sculpt-shorts-10-every-body.jpg'),
+            img('sculpt-shorts-12-seven-colors_05986944-5da7-4719-b061-5199803cc1e0.jpg'),
+            img('sculpt-shorts-01-black-side_ee1acd13-7da8-4fec-ae8c-26e76b51ab82.jpg'),
+            img('sculpt-shorts-color-raspberry_b2246b6b-39ed-4508-910d-fb15a912578d.jpg'),
+            img('sculpt-shorts-color-beige_c5ba6b0a-57cd-4b10-81eb-b5733f4eb1c5.jpg'),
+            img('sculpt-shorts-color-darkgray_9e01d7ab-5017-4b01-8cec-17599f7bcd6c.jpg'),
+            img('sculpt-shorts-color-lightgray_748b2a8d-82fe-4387-b6de-0d4a4c5ed6c8.jpg'),
+            img('sculpt-shorts-color-skyblue_8bd0fefd-3aa2-4ea1-8575-48634950e61b.jpg'),
+            img('sculpt-shorts-color-teal_ddfc124d-09c3-426e-82c7-11cb8f3959ca.jpg'),
+        ],
+        // Gallery index to show when a color is picked
+        colorImages: {
+            'Black': 9,
+            'Raspberry': 10,
+            'Beige': 11,
+            'Dark Gray': 12,
+            'Light Gray': 13,
+            'Sky Blue': 14,
+            'Teal': 15,
+        },
+    },
+    {
+        id: 4,
+        slug: 'sculpt-bra-wireless-lift',
+        name: 'Sculpt Bra · Wireless Lift',
+        price: 9802.89,
+        created: 1,
+        colors: ['Black', 'Beige', 'Pink'],
+        sizes: SIZES,
+        image: img('sculpt-bra-02-features.jpg', 533),
+        hoverImage: img('sculpt-bra-02-black-front.jpg', 533),
+        gallery: [
+            img('sculpt-bra-02-features.jpg'),
+            img('sculpt-bra-02-black-front.jpg'),
+            img('sculpt-bra-07-every-body.jpg'),
+            img('sculpt-bra-04-without-with.jpg'),
+            img('sculpt-bra-03-black-back.jpg'),
+            img('sculpt-bra-03-pink.jpg'),
+            img('sculpt-bra-06-three-colors.jpg'),
+            img('sculpt-bra-01-black-packshot.jpg'),
+            img('sculpt-bra-color-beige.jpg'),
+            img('sculpt-bra-color-pink.jpg'),
+        ],
+        // Gallery index to show when a color is picked
+        colorImages: {
+            'Black': 7,
+            'Beige': 8,
+            'Pink': 9,
+        },
+    },
+    {
+        id: 5,
+        slug: 'sculpt-pant-flat-front',
+        name: 'Sculpt Pant · Flat Front',
+        price: 19633.86,
+        created: 5,
+        colors: ['Black', 'Grey', 'Navy Blue', 'Coffee'],
+        sizes: ['S', 'M', 'L', 'XL', '2XL'],
+        image: img('sculpt-pant-02-features.jpg', 533),
+        hoverImage: img('sculpt-pant-01-navy.jpg', 533),
+        gallery: [
+            img('sculpt-pant-02-features.jpg'),
+            img('sculpt-pant-01-navy.jpg'),
+            img('sculpt-pant-04-without-with.jpg'),
+            img('sculpt-pant-06-black-back.jpg'),
+            img('sculpt-pant-08-every-body.jpg'),
+            img('sculpt-pant-10-four-colors.jpg'),
+            img('sculpt-pant-01-black-front.jpg'),
+            img('sculpt-pant-color-grey.jpg'),
+            img('sculpt-pant-color-blue.jpg'),
+            img('sculpt-pant-color-coffee.jpg'),
+        ],
+        // Gallery index to show when a color is picked
+        colorImages: {
+            'Black': 6,
+            'Grey': 7,
+            'Navy Blue': 8,
+            'Coffee': 9,
+        },
+    }
+];
+
+export const getProductBySlug = (slug) => PRODUCTS.find((p) => p.slug === slug);
+
+export const formatPrice = (n) =>
+    'Rs.' + n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });

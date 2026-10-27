@@ -8,6 +8,7 @@ import Track from './Pages/Track/Track'
 import BestSeller from './Pages/BestSeller/BestSeller'
 import Shop from './Pages/Shop/Shop'
 import Contact from './Pages/Contact/Contact'
+import Product from "./Pages/Products/Products"
 function App() {
   const [count, setCount] = useState(0)
 
@@ -22,6 +23,7 @@ function App() {
           <Route path="/app/parcelpanel" element={<Track />} />
           <Route path="/products/glowbeam-sculpt-brief" element={<Shop />} />
           <Route path="/collections/best-sellers" element={<BestSeller />} />
+          <Route path="/products/:slug" element={<Product />} />
         </Routes>
       </BrowserRouter>
 
