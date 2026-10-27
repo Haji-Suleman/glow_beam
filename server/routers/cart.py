@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timezone  # <-- Added timezone
 from typing import Optional
 
 from fastapi import APIRouter, Depends, HTTPException
@@ -12,10 +12,10 @@ router = APIRouter(prefix="/api/cart", tags=["cart"])
 
 
 class CartItemIn(BaseModel):
-    kind: str = "product"            # "product" | "addon"
+    kind: str = "product"  # "product" | "addon"
     slug: str
     name: str
-    color: Optional[str] = None      # every single color is stored
+    color: Optional[str] = None  # every single color is stored
     size: Optional[str] = None
     qty: int = Field(ge=1, le=99)
     unit_price: float
@@ -35,8 +35,9 @@ class Cart(SQLModel, table=True):
     items: list = SQLField(default_factory=list, sa_column=Column(JSON))
     subtotal: float = 0
     savings: float = 0
-    status: str = "open"             # "open" | "checkout"
-    updated_at: datetime = SQLField(default_factory=datetime.utcnow)
+    status: str = "open"  # "open" | "checkout"
+    # FIX: Use timezone-aware datetime
+    updated_at: datetime = SQLField(default_factory=lambda: datetime.now(timezone.utc))
 
 
 def _save(body: CartIn, status: str, db: Session) -> Cart:
@@ -46,7 +47,8 @@ def _save(body: CartIn, status: str, db: Session) -> Cart:
         subtotal=body.subtotal,
         savings=body.savings,
         status=status,
-        updated_at=datetime.utcnow(),
+        # FIX: Use timezone-aware datetime
+        updated_at=datetime.now(timezone.utc),
     )
     db.merge(cart)  # insert or update by session_id
     db.commit()

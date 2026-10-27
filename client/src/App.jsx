@@ -7,7 +7,7 @@ import Shop from './Pages/Shop/Shop'
 import Contact from './Pages/Contact/Contact'
 import Product from "./Pages/Products/Products"
 import CartDrawer from './Components/CartDrawer/CartDrawer'
-
+import Checkout from './Pages/Checkout/Checkout'
 function App() {
   return (
     <>
@@ -19,6 +19,7 @@ function App() {
         <Route path="/products/glowbeam-sculpt-brief" element={<Shop />} />
         <Route path="/collections/best-sellers" element={<BestSeller />} />
         <Route path="/products/:slug" element={<Product />} />
+        <Route path="/checkout" element={<Checkout />} />
       </Routes>
 
       <CartDrawer />
