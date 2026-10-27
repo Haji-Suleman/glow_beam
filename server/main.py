@@ -1,6 +1,11 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from routers import support  # Import the support router
+from sqlmodel import SQLModel
+from database import engine  # Import the database engine
+
+# Import your routers
+from routers import support
+from routers import cart  # Import the new cart router
 
 app = FastAPI()
 
@@ -8,8 +13,8 @@ app = FastAPI()
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
-        "http://localhost:3000",  # CRA
-        "http://localhost:5173",  # Vite
+        "http://localhost:3000",
+        "http://localhost:5173",
         "http://127.0.0.1:3000",
         "http://127.0.0.1:5173",
     ],
@@ -18,8 +23,15 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+
+# ---- Create Database Tables ----
+# This looks at all your SQLModel models (like your Cart model)
+# and creates the tables in the database if they don't exist.
+@app.on_event("startup")
+def on_startup():
+    SQLModel.metadata.create_all(engine)
+
+
 # ---- Register Routers ----
 app.include_router(support.router)
-# When you add new files to the routers folder, just import and include them here:
-# app.include_router(users.router)
-# app.include_router(products.router)
+app.include_router(cart.router)  # Register the cart router
