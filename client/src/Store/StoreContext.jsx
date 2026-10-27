@@ -1,7 +1,7 @@
 import React, {
     createContext, useContext, useEffect, useMemo, useReducer, useRef, useState, useCallback,
 } from 'react';
-import { resolveLine } from './cartConfig';
+import { resolveLine, applyBogo } from './cartConfig';
 
 const CART_KEY = 'saybeam_cart_v1';
 const SESSION_KEY = 'saybeam_session_id';
@@ -18,6 +18,7 @@ const read = (key, fallback) => {
         return fallback;
     }
 };
+
 const write = (key, value) => {
     try {
         localStorage.setItem(key, JSON.stringify(value));
@@ -41,11 +42,15 @@ function cartReducer(state, action) {
         case 'SET':
             return action.lines;
         case 'ADD': {
-            const { type = 'product', id, color = '', size = '', qty = 1, deal = null } = action.item;
+            const {
+                type = 'product', id, color = '', size = '', qty = 1, deal = null,
+            } = action.item;
             const key = makeKey({ type, id, color, size, deal });
             const found = state.find((l) => l.key === key);
             if (found) {
-                return state.map((l) => (l.key === key ? { ...l, qty: l.qty + qty } : l));
+                return state.map((l) =>
+                    l.key === key ? { ...l, qty: l.qty + qty } : l
+                );
             }
             return [...state, { key, type, id, color, size, deal, qty }];
         }
@@ -72,11 +77,18 @@ export const StoreProvider = ({ children }) => {
     const sessionId = useRef(getSessionId());
     const firstRun = useRef(true);
 
-    // Display data comes from product data, so prices stay fresh
-    const lines = useMemo(() => stored.map(resolveLine).filter(Boolean), [stored]);
+    // FIX: applyBogo is restored here (was on a deleted module-scope line).
+    // Display data comes from product data, so prices stay fresh.
+    const lines = useMemo(
+        () => applyBogo(stored.map(resolveLine).filter(Boolean)),
+        [stored]
+    );
 
     const count = useMemo(() => lines.reduce((n, l) => n + l.qty, 0), [lines]);
-    const subtotal = useMemo(() => lines.reduce((s, l) => s + l.paid, 0), [lines]);
+    const subtotal = useMemo(
+        () => lines.reduce((s, l) => s + l.paid, 0),
+        [lines]
+    );
     const savings = useMemo(
         () => lines.reduce((s, l) => s + Math.max(l.compare - l.paid, 0), 0),
         [lines]
@@ -90,7 +102,9 @@ export const StoreProvider = ({ children }) => {
     // 2) Cross-tab sync
     useEffect(() => {
         const onStorage = (e) => {
-            if (e.key === CART_KEY) dispatch({ type: 'SET', lines: read(CART_KEY, []) });
+            if (e.key === CART_KEY) {
+                dispatch({ type: 'SET', lines: read(CART_KEY, []) });
+            }
         };
         window.addEventListener('storage', onStorage);
         return () => window.removeEventListener('storage', onStorage);
@@ -109,13 +123,34 @@ export const StoreProvider = ({ children }) => {
         }
     }, [stored.length, expiresAt]);
 
+    // 4) FIX: actually enforce the expiry — clear the cart when it passes.
+    useEffect(() => {
+        if (!expiresAt) return;
+
+        const ms = expiresAt - Date.now();
+        if (ms <= 0) {
+            dispatch({ type: 'CLEAR' });
+            setExpiresAt(null);
+            localStorage.removeItem(EXPIRY_KEY);
+            return;
+        }
+
+        const t = setTimeout(() => {
+            dispatch({ type: 'CLEAR' });
+            setExpiresAt(null);
+            localStorage.removeItem(EXPIRY_KEY);
+        }, ms);
+
+        return () => clearTimeout(t);
+    }, [expiresAt]);
+
     const restartTimer = useCallback(() => {
         const t = Date.now() + CART_MINUTES * 60 * 1000;
         setExpiresAt(t);
         write(EXPIRY_KEY, t);
     }, []);
 
-    // 4) Debounced sync to FastAPI (color included on every item)
+    // 5) Debounced sync to FastAPI (color included on every item)
     const buildPayload = useCallback(
         () => ({
             session_id: sessionId.current,
@@ -168,7 +203,13 @@ export const StoreProvider = ({ children }) => {
 
     const setQty = useCallback((key, qty) => dispatch({ type: 'SET_QTY', key, qty }), []);
     const removeLine = useCallback((key) => dispatch({ type: 'REMOVE', key }), []);
-    const clearCart = useCallback(() => dispatch({ type: 'CLEAR' }), []);
+
+    // FIX: also clear the expiry timestamp so a new timer starts cleanly.
+    const clearCart = useCallback(() => {
+        dispatch({ type: 'CLEAR' });
+        setExpiresAt(null);
+        localStorage.removeItem(EXPIRY_KEY);
+    }, []);
 
     const checkout = useCallback(async () => {
         try {

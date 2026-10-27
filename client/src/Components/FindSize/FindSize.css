@@ -1,0 +1,421 @@
+/* FindSize.css */
+
+.fs-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    animation: fadeIn 0.2s ease;
+}
+
+.fs-modal {
+    background: #fff;
+    width: 100%;
+    max-width: 500px;
+    border-radius: 16px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: column;
+    max-height: 90vh;
+    animation: slideUp 0.3s ease;
+    font-family: inherit;
+    overflow: hidden;
+}
+
+/* Header */
+.fs-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 24px;
+    border-bottom: 1px solid #eee;
+}
+
+.fs-header h2 {
+    margin: 0 0 4px 0;
+    font-size: 20px;
+    font-weight: 700;
+    color: #222;
+    letter-spacing: -0.3px;
+}
+
+.fs-header p {
+    margin: 0;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: #cf5b7d;
+    font-weight: 700;
+}
+
+.fs-close {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #999;
+    padding: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.2s, transform 0.2s;
+}
+
+.fs-close:hover {
+    color: #222;
+    transform: scale(1.1);
+}
+
+/* Tabs */
+.fs-tabs {
+    display: flex;
+    padding: 0 24px;
+    border-bottom: 1px solid #eee;
+    background: #fafafa;
+}
+
+.fs-tab {
+    flex: 1;
+    background: none;
+    border: none;
+    padding: 16px 0;
+    font-size: 14px;
+    font-weight: 500;
+    color: #666;
+    cursor: pointer;
+    position: relative;
+    transition: color 0.2s;
+}
+
+.fs-tab:hover {
+    color: #333;
+}
+
+.fs-tab.active {
+    color: #cf5b7d;
+    font-weight: 600;
+}
+
+.fs-tab.active::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: #cf5b7d;
+    border-radius: 3px 3px 0 0;
+}
+
+/* Body */
+.fs-body {
+    padding: 24px;
+    overflow-y: auto;
+    flex: 1;
+}
+
+.fs-body::-webkit-scrollbar {
+    width: 6px;
+}
+
+.fs-body::-webkit-scrollbar-thumb {
+    background: #ddd;
+    border-radius: 3px;
+}
+
+/* Calculator Tab */
+.fs-calc h3 {
+    font-size: 18px;
+    margin: 0 0 12px;
+    color: #222;
+}
+
+.fs-desc {
+    font-size: 13.5px;
+    color: #555;
+    line-height: 1.6;
+    margin-bottom: 24px;
+}
+
+.fs-unit-toggle {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #ccc;
+}
+
+.fs-unit-toggle button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #999;
+    padding: 0;
+    font-size: 13px;
+    font-weight: 600;
+    transition: color 0.2s;
+}
+
+.fs-unit-toggle button:hover {
+    color: #cf5b7d;
+}
+
+.fs-unit-toggle button.active {
+    color: #cf5b7d;
+}
+
+.fs-input-group {
+    display: flex;
+    align-items: center;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 14px 16px;
+    margin-bottom: 20px;
+    background: #fff;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.fs-input-group:focus-within {
+    border-color: #cf5b7d;
+    box-shadow: 0 0 0 2px rgba(207, 91, 125, 0.1);
+}
+
+.fs-input-group input {
+    flex: 1;
+    border: none;
+    background: transparent;
+    font-size: 16px;
+    outline: none;
+    color: #222;
+}
+
+.fs-input-group input::placeholder {
+    color: #aaa;
+}
+
+.fs-input-group span {
+    color: #999;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.fs-result {
+    text-align: center;
+    font-weight: 600;
+    color: #1fb26b;
+    margin-top: 16px;
+    font-size: 15px;
+    background: #eaf8f1;
+    padding: 12px;
+    border-radius: 8px;
+}
+
+.fs-link {
+    display: block;
+    text-align: center;
+    background: none;
+    border: none;
+    color: #666;
+    font-size: 12.5px;
+    text-decoration: underline;
+    margin: 20px auto 0;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.fs-link:hover {
+    color: #cf5b7d;
+}
+
+/* Chart Tab */
+.fs-chart .fs-unit-toggle {
+    margin-bottom: 16px;
+}
+
+.fs-table-wrapper {
+    border: 1px solid #eee;
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 24px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+}
+
+.fs-table-wrapper table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13.5px;
+    text-align: center;
+}
+
+.fs-table-wrapper th {
+    background: #831d3f;
+    color: #fff;
+    padding: 12px;
+    font-weight: 600;
+    font-size: 12px;
+    letter-spacing: 0.5px;
+}
+
+.fs-table-wrapper td {
+    padding: 12px;
+    border-bottom: 1px solid #eee;
+    color: #444;
+}
+
+.fs-table-wrapper tr:last-child td {
+    border-bottom: none;
+}
+
+.fs-table-wrapper tr:nth-child(even) {
+    background: #fdfbfc;
+}
+
+.fs-bold {
+    font-weight: 700;
+    color: #222;
+}
+
+/* How to measure section */
+.fs-how-to {
+    display: flex;
+    gap: 16px;
+    background: #f9f9f9;
+    padding: 16px;
+    border-radius: 8px;
+    margin-bottom: 24px;
+    align-items: center;
+}
+
+.fs-how-img {
+    width: 70px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Added styles for the image you provided */
+.fs-how-img img {
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+    border-radius: 4px;
+}
+
+.fs-how-text h4 {
+    margin: 0 0 6px;
+    font-size: 14px;
+    color: #222;
+}
+
+.fs-how-text p {
+    margin: 0;
+    font-size: 12.5px;
+    color: #555;
+    line-height: 1.5;
+}
+
+/* Tips List */
+.fs-tips {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.fs-tips li {
+    font-size: 13px;
+    color: #555;
+    line-height: 1.6;
+    margin-bottom: 14px;
+    padding-left: 24px;
+    position: relative;
+}
+
+.fs-tips li::before {
+    content: '✓';
+    position: absolute;
+    left: 0;
+    top: 0;
+    color: #cf5b7d;
+    font-weight: bold;
+    font-size: 15px;
+}
+
+.fs-tips li b {
+    color: #222;
+}
+
+/* Footer */
+.fs-footer {
+    padding: 20px 24px;
+    border-top: 1px solid #eee;
+    text-align: center;
+    background: #fff;
+}
+
+.fs-guarantee {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    font-size: 12.5px;
+    color: #666;
+    margin: 0 0 16px;
+    font-weight: 500;
+}
+
+.fs-guarantee svg {
+    color: #cf5b7d;
+    flex-shrink: 0;
+}
+
+.fs-btn-primary {
+    width: 100%;
+    background: #cf5b7d;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 16px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.1s;
+    letter-spacing: 0.3px;
+}
+
+.fs-btn-primary:hover {
+    background: #b84b6a;
+}
+
+.fs-btn-primary:active {
+    transform: scale(0.98);
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideUp {
+    from {
+        transform: translateY(30px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}

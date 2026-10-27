@@ -2,11 +2,19 @@ import React, { useEffect, useState } from 'react';
 import './CartDrawer.css';
 import { useStore } from '../../Store/StoreContext';
 import { PRODUCTS, formatPrice } from '../../Store/Products/Products';
-import { COLOR_HEX, UPSELL_OFF, upsellPrice, ADDONS } from '../../Store/cartConfig';
+import { COLOR_HEX, UPSELL_OFF, upsellPrice } from '../../Store/cartConfig';
 
 // Put your own avatar images here
-const AVATARS = ['/images/avatar1.jpg', '/images/avatar2.jpg', '/images/avatar3.jpg', '/images/avatar4.jpg'];
-const PAYMENTS = ['amazon', 'applepay', 'discover', 'mastercard', 'paypal', 'shoppay', 'visa'];
+const AVATARS = ['https://randomuser.me/api/portraits/women/1.jpg', 'https://randomuser.me/api/portraits/women/2.jpg', 'https://randomuser.me/api/portraits/women/3.jpg', 'https://randomuser.me/api/portraits/women/68.jpg'];
+const PAYMENTS = [
+    { name: 'Amazon', src: 'https://moonbundle-assets.fra1.cdn.digitaloceanspaces.com/cart-svg/amazon.svg' },
+    { name: 'Apple Pay', src: 'https://moonbundle-assets.fra1.cdn.digitaloceanspaces.com/cart-svg/applePayTwo.svg' },
+    { name: 'Discover', src: 'https://moonbundle-assets.fra1.cdn.digitaloceanspaces.com/cart-svg/discover.svg' },
+    { name: 'Mastercard', src: 'https://moonbundle-assets.fra1.cdn.digitaloceanspaces.com/cart-svg/mastercardNotxt.svg' },
+    { name: 'PayPal', src: 'https://moonbundle-assets.fra1.cdn.digitaloceanspaces.com/cart-svg/paypalTwo.svg' },
+    { name: 'Shop Pay', src: 'https://moonbundle-assets.fra1.cdn.digitaloceanspaces.com/cart-svg/shopPay.svg' },
+    { name: 'Visa', src: 'https://moonbundle-assets.fra1.cdn.digitaloceanspaces.com/cart-svg/visaBlue.svg' },
+];
 const PAGE_SIZE = 3;
 
 const Icon = {
@@ -25,9 +33,19 @@ const Icon = {
             <path d="M20.6 12.6l-8-8A2 2 0 0011.2 4H5a1 1 0 00-1 1v6.2a2 2 0 00.6 1.4l8 8a2 2 0 002.8 0l5.2-5.2a2 2 0 000-2.8zM7.5 9A1.5 1.5 0 119 7.5 1.5 1.5 0 017.5 9z" />
         </svg>
     ),
+    // UPDATED: New Gift Card SVG
     gift: (
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <rect x="3" y="8" width="18" height="4" /><path d="M12 8v13M5 12v9h14v-9M7.5 8a2.5 2.5 0 010-5C11 3 12 8 12 8s1-5 4.5-5a2.5 2.5 0 010 5" />
+        <svg width="24" height="24" viewBox="-8 -8 80 80" fill="currentColor">
+            <g>
+                <path d="M 8 28 L 8 58 C 8 59.12 8.88 60 10 60 L 54 60 C 55.12 60 56 59.12 56 58 L 56 28 L 36 28 L 36 60 L 28 60 L 28 28 Z"></path>
+            </g>
+            <g>
+                <path d="M 0 16 C 0 13.8 1.8 12 4 12 L 28 12 L 28 24 L 4 24 C 1.8 24 0 22.2 0 20 Z"></path>
+                <path d="M 36 12 L 60 12 C 62.2 12 64 13.8 64 16 L 64 20 C 64 22.2 62.2 24 60 24 L 36 24 Z"></path>
+                <path d="M 28 12 Q 12 12 8 6 Q 6 2 10 2 Q 16 2 22 6 Q 28 10 28 12" fill="none" stroke="currentColor" strokeWidth="4.8" strokeLinejoin="round"></path>
+                <path d="M 36 12 Q 52 12 56 6 Q 58 2 54 2 Q 48 2 42 6 Q 36 10 36 12" fill="none" stroke="currentColor" strokeWidth="4.8" strokeLinejoin="round"></path>
+                <rect x="28" y="8" width="8" height="8" fill="currentColor" transform="rotate(45 32 12)"></rect>
+            </g>
         </svg>
     ),
     flame: (
@@ -48,30 +66,41 @@ const Icon = {
     ),
 };
 
-const useCountdown = (expiresAt, active, onExpire) => {
-    const [left, setLeft] = useState(0);
+const useCountdown = (expiresAt, active) => {
+    const [left, setLeft] = useState(() =>
+        expiresAt ? Math.max(0, Math.round((expiresAt - Date.now()) / 1000)) : 0
+    );
+
     useEffect(() => {
         if (!expiresAt || !active) return undefined;
+
         const tick = () => {
-            const s = Math.max(0, Math.round((expiresAt - Date.now()) / 1000));
-            setLeft(s);
-            if (s === 0) onExpire();
+            setLeft(Math.max(0, Math.round((expiresAt - Date.now()) / 1000)));
         };
+
         tick();
         const id = setInterval(tick, 1000);
         return () => clearInterval(id);
-    }, [expiresAt, active]); // eslint-disable-line react-hooks/exhaustive-deps
+    }, [expiresAt, active]);
+
     const mm = String(Math.floor(left / 60)).padStart(2, '0');
     const ss = String(left % 60).padStart(2, '0');
     return `${mm}:${ss}`;
 };
 
 const UpsellCard = ({ product, onAdd }) => {
-    const [color, setColor] = useState(product.colors[0]);
-    const [size, setSize] = useState(product.sizes[0]);
+    const [color, setColor] = useState(product.colors?.[0] ?? '');
+    const [size, setSize] = useState(product.sizes?.[0] ?? '');
     const off = UPSELL_OFF[product.slug] || 0;
+
     const idx = product.colorImages?.[color];
-    const img = (idx !== undefined ? product.gallery[idx] : product.image).replace(/width=\d+/, 'width=200');
+    const rawImg =
+        (idx !== undefined ? product.gallery?.[idx] : undefined) ??
+        product.gallery?.[0] ??
+        product.image;
+    const img = typeof rawImg === 'string'
+        ? rawImg.replace(/width=\d+/, 'width=200')
+        : rawImg;
 
     return (
         <li className="cd-up">
@@ -79,13 +108,13 @@ const UpsellCard = ({ product, onAdd }) => {
             <div className="cd-up__body">
                 <div className="cd-up__top">
                     <h4>{product.name}</h4>
-                    <span className="cd-off cd-off--sm">{formatPrice(off)} OFF</span>
+                    {off > 0 && <span className="cd-off cd-off--sm">{formatPrice(off)} OFF</span>}
                 </div>
                 <p className="cd-up__price">
                     <s>{formatPrice(product.price)}</s> <strong>{formatPrice(upsellPrice(product))}</strong>
                 </p>
                 <div className="cd-up__swatches">
-                    {product.colors.map((c) => (
+                    {(product.colors || []).map((c) => (
                         <button
                             key={c}
                             type="button"
@@ -100,7 +129,7 @@ const UpsellCard = ({ product, onAdd }) => {
                 <div className="cd-up__row">
                     <div className="cd-select">
                         <select value={size} onChange={(e) => setSize(e.target.value)} aria-label="Size">
-                            {product.sizes.map((s) => <option key={s} value={s}>{s}</option>)}
+                            {(product.sizes || []).map((s) => <option key={s} value={s}>{s}</option>)}
                         </select>
                         {Icon.chevron}
                     </div>
@@ -114,10 +143,11 @@ const UpsellCard = ({ product, onAdd }) => {
 const CartDrawer = () => {
     const {
         lines, count, subtotal, savings, isOpen, closeCart,
-        addToCart, setQty, removeLine, checkout, expiresAt, restartTimer,
+        addToCart, setQty, removeLine, checkout, expiresAt,
     } = useStore();
+
     const [page, setPage] = useState(0);
-    const timer = useCountdown(expiresAt, isOpen && lines.length > 0, restartTimer);
+    const timer = useCountdown(expiresAt, isOpen && lines.length > 0);
 
     useEffect(() => {
         if (!isOpen) return undefined;
@@ -133,7 +163,8 @@ const CartDrawer = () => {
 
     const upsellProducts = PRODUCTS.filter((p) => UPSELL_OFF[p.slug] !== undefined);
     const pages = Math.max(1, Math.ceil(upsellProducts.length / PAGE_SIZE));
-    const visible = upsellProducts.slice(page * PAGE_SIZE, page * PAGE_SIZE + PAGE_SIZE);
+    const safePage = Math.min(page, pages - 1);
+    const visible = upsellProducts.slice(safePage * PAGE_SIZE, safePage * PAGE_SIZE + PAGE_SIZE);
 
     const handleUpsellAdd = (p, color, size) =>
         addToCart({ id: p.slug, color, size, deal: 'upsell' }, { open: false });
@@ -141,7 +172,13 @@ const CartDrawer = () => {
     return (
         <>
             <div className={`cd-overlay ${isOpen ? 'is-open' : ''}`} onClick={closeCart} />
-            <aside className={`cd ${isOpen ? 'is-open' : ''}`} role="dialog" aria-modal="true" aria-label="Your cart" aria-hidden={!isOpen}>
+            <aside
+                className={`cd ${isOpen ? 'is-open' : ''}`}
+                role="dialog"
+                aria-modal="true"
+                aria-label="Your cart"
+                aria-hidden={!isOpen}
+            >
                 <header className="cd-head">
                     <h3>Your Cart <span className="cd-count">{count}</span></h3>
                     <button type="button" className="cd-close" onClick={closeCart} aria-label="Close cart">{Icon.close}</button>
@@ -154,7 +191,9 @@ const CartDrawer = () => {
                     </div>
                 ) : (
                     <div className="cd-body">
-                        <div className="cd-banner">Your cart expires in {timer}</div>
+                        <div className="cd-banner" aria-live="polite">
+                            Your cart expires in {timer}
+                        </div>
 
                         <div className="cd-rating">
                             <div className="cd-avatars">
@@ -198,9 +237,19 @@ const CartDrawer = () => {
                         <div className="cd-upsell-head">
                             <h4>{Icon.flame} You Might Also Like</h4>
                             <div className="cd-pager">
-                                <button type="button" disabled={page === 0} onClick={() => setPage(page - 1)} aria-label="Previous">{Icon.left}</button>
-                                <span>{page + 1}/{pages}</span>
-                                <button type="button" disabled={page >= pages - 1} onClick={() => setPage(page + 1)} aria-label="Next">{Icon.right}</button>
+                                <button
+                                    type="button"
+                                    disabled={safePage === 0}
+                                    onClick={() => setPage(Math.max(0, safePage - 1))}
+                                    aria-label="Previous"
+                                >{Icon.left}</button>
+                                <span>{safePage + 1}/{pages}</span>
+                                <button
+                                    type="button"
+                                    disabled={safePage >= pages - 1}
+                                    onClick={() => setPage(Math.min(pages - 1, safePage + 1))}
+                                    aria-label="Next"
+                                >{Icon.right}</button>
                             </div>
                         </div>
                         <ul className="cd-upsell">
@@ -217,7 +266,8 @@ const CartDrawer = () => {
                     </div>
                     <button type="button" className="cd-checkout" disabled={lines.length === 0} onClick={checkout}>CHECKOUT</button>
                     <div className="cd-pay">
-                        {PAYMENTS.map((p) => <img key={p} src={`/payments/${p}.svg`} alt={p} />)}
+                        {/* FIX: key={p.name} instead of key={p} because `p` is an object */}
+                        {PAYMENTS.map((p) => <img key={p.name} src={p.src} alt={p.name} />)}
                     </div>
                     <p className="cd-risk">{Icon.check} Try risk-free: 90 days, love it or your money back</p>
                 </footer>

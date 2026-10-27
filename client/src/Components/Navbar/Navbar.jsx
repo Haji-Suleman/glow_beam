@@ -4,7 +4,7 @@ import "./Navbar.css";
 // Change these to your own brand and pages
 const BRAND_NAME = "Your Brand";
 const ANNOUNCEMENT = "90-day money-back guarantee";
-
+import { useStore } from "../../Store/StoreContext";
 const LINKS = [
     { label: "Home", href: "/" },
     { label: "The Sculpt Brief™", href: "/products/glowbeam-sculpt-brief" },
@@ -43,11 +43,11 @@ function BagIcon() {
 
 export default function Navbar({ cartCount = 0 }) {
     const [menuOpen, setMenuOpen] = useState(false);
+    const { count, openCart } = useStore()
 
     // Simple active-link check. Once you add React Router,
     // replace the <a> tags below with <NavLink> and drop this.
     const currentPath = typeof window !== "undefined" ? window.location.pathname : "/";
-
     return (
         <>
             {/* Upper nav: announcement bar */}
@@ -100,10 +100,15 @@ export default function Navbar({ cartCount = 0 }) {
                     <a href="/account" className="navbar__icon-btn" aria-label="Log in">
                         <UserIcon />
                     </a>
-                    <a href="/cart" className="navbar__icon-btn" aria-label={`Cart, ${cartCount} items`}>
+                    <button
+                        type="button"
+                        className="navbar__icon-btn"
+                        aria-label={`Open cart, ${count} items`}
+                        onClick={openCart}
+                    >
                         <BagIcon />
-                        {cartCount > 0 && <span className="navbar__badge">{cartCount}</span>}
-                    </a>
+                        {count > 0 && <span className="navbar__badge">{count}</span>}
+                    </button>
                 </div>
             </header>
         </>

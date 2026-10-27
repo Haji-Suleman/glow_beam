@@ -1,17 +1,24 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { useParams, Navigate } from 'react-router-dom';
 import './Products.css';
 import Navbar from '../../Components/Navbar/Navbar';
 import CustomerService from '../../Components/CustomerService/Customerservice';
 import Footer from '../../Components/Footer/Footer';
-import { getProductBySlug, formatPrice } from '../../Store/Products/Products';
+import { getProductBySlug, formatPrice } from '../../Store/Products/Products.js';
+import { useStore } from '../../Store/StoreContext';
+
 const Product = () => {
+    const { addToCart } = useStore();
     const { slug } = useParams();
     const product = getProductBySlug(slug);
 
+    // FIX: initialise synchronously from the product so the first render
+    // already shows a valid <select> value and color legend.
     const [activeIndex, setActiveIndex] = useState(0);
-    const [color, setColor] = useState('');
-    const [size, setSize] = useState('');
+    const [color, setColor] = useState(product?.colors?.[0] ?? '');
+    const [size, setSize] = useState(
+        product?.sizes?.[1] ?? product?.sizes?.[0] ?? ''
+    );
     const [zoom, setZoom] = useState({ active: false, x: 50, y: 50 });
     const thumbsRef = useRef(null);
     const [atStart, setAtStart] = useState(true);
@@ -22,20 +29,27 @@ const Product = () => {
         if (!product) return;
         window.scrollTo(0, 0);
         setActiveIndex(0);
-        setColor(product.colors[0]);
-        setSize(product.sizes[1] || product.sizes[0]);
-    }, [slug]); // eslint-disable-line react-hooks/exhaustive-deps
+        setColor(product.colors?.[0] ?? '');
+        setSize(product.sizes?.[1] ?? product.sizes?.[0] ?? '');
+    }, [slug, product]);
 
-    const updateArrows = () => {
+    const updateArrows = useCallback(() => {
         const el = thumbsRef.current;
         if (!el) return;
         setAtStart(el.scrollLeft <= 2);
         setAtEnd(el.scrollLeft + el.clientWidth >= el.scrollWidth - 2);
-    };
+    }, []);
 
+    // FIX: keep arrow state in sync on layout changes, not just product change.
     useEffect(() => {
+        const el = thumbsRef.current;
+        if (!el) return;
         updateArrows();
-    }, [product]);
+
+        const ro = new ResizeObserver(updateArrows);
+        ro.observe(el);
+        return () => ro.disconnect();
+    }, [product, updateArrows]);
 
     if (!product) return <Navigate to="/collections/best-sellers" replace />;
 
@@ -53,8 +67,13 @@ const Product = () => {
     };
 
     const handleAddToCart = () => {
-        // Replace with your cart logic / API call
-        console.log('Add to cart:', { id: product.id, name: product.name, color, size });
+        // FIX: reducer reads `qty`, not `quantity`. `productId` was dropped anyway.
+        addToCart({
+            id: product.slug,
+            color,
+            size,
+            qty: 1,
+        });
     };
 
     return (
@@ -98,13 +117,18 @@ const Product = () => {
                                 aria-label="Previous images"
                             >‹</button>
 
-                            <ul className="product-thumbs__list" ref={thumbsRef} onScroll={updateArrows}>
+                            <ul
+                                className="product-thumbs__list"
+                                ref={thumbsRef}
+                                onScroll={updateArrows}
+                            >
                                 {product.gallery.map((src, i) => (
                                     <li key={src}>
                                         <button
                                             type="button"
                                             className={`product-thumbs__item ${i === activeIndex ? 'active' : ''}`}
                                             onClick={() => setActiveIndex(i)}
+                                            aria-current={i === activeIndex ? 'true' : undefined}
                                         >
                                             <img src={src} alt={`${product.name} ${i + 1}`} />
                                         </button>
@@ -136,6 +160,7 @@ const Product = () => {
                                         type="button"
                                         className={`product-pill ${c === color ? 'selected' : ''}`}
                                         onClick={() => setColor(c)}
+                                        aria-pressed={c === color}
                                     >
                                         {c}
                                     </button>
