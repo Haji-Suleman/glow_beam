@@ -8,8 +8,17 @@ import Contact from './Pages/Contact/Contact'
 import Product from "./Pages/Products/Products"
 import CartDrawer from './Components/CartDrawer/CartDrawer'
 import Checkout from './Pages/Checkout/Checkout'
+import AddonPage from './Pages/AddonsPage/AddonsPage'
+import { useParams } from 'react-router-dom';
+import { getAddonBySlug } from './Store/cartConfig';
+import AdminProducts from './Pages/Admin/AdminProducts'
+
+const ProductRoute = () => {
+  const { slug } = useParams();
+  return getAddonBySlug(slug) ? <AddonPage /> : <Product />;
+};
 function App() {
-  return (
+return (
     <>
       <Routes>
         <Route path="/" element={<LandingPage />} />
@@ -18,8 +27,9 @@ function App() {
         <Route path="/app/parcelpanel" element={<Track />} />
         <Route path="/products/glowbeam-sculpt-brief" element={<Shop />} />
         <Route path="/collections/best-sellers" element={<BestSeller />} />
-        <Route path="/products/:slug" element={<Product />} />
+        <Route path="/products/:slug" element={<ProductRoute />} />
         <Route path="/checkout" element={<Checkout />} />
+        <Route path="/admin" element={<AdminProducts />} />
       </Routes>
 
       <CartDrawer />

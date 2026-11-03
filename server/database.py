@@ -1,16 +1,39 @@
-from sqlmodel import create_engine, Session
+import os
 
-# 1. Define your database URL
-# This example uses SQLite, which creates a local file named "database.db"
-sqlite_file_name = "database.db"
-sqlite_url = f"sqlite:///{sqlite_file_name}"
+from dotenv import load_dotenv
+from sqlmodel import Session, SQLModel, create_engine
 
-# 2. Create the engine
-# connect_args={"check_same_thread": False} is only required for SQLite
-engine = create_engine(sqlite_url, connect_args={"check_same_thread": False}, echo=True)
+load_dotenv()
+
+# Pooled Neon URL if set, else direct Neon URL, else local SQLite file
+DATABASE_URL = (
+    os.getenv("DATABASE_URL_POOLED")
+    or os.getenv("DATABASE_URL")
+    or "sqlite:///database.db"
+)
+
+if DATABASE_URL.startswith(("postgres://", "postgresql://")):
+    DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql://", 1)
+    DATABASE_URL = DATABASE_URL.replace("postgresql://", "postgresql+psycopg://", 1)
+    engine = create_engine(
+        DATABASE_URL,
+        echo=False,
+        pool_pre_ping=True,
+        pool_recycle=300,
+        connect_args={"prepare_threshold": None},  # safe with Neon's pooler
+    )
+else:
+    engine = create_engine(
+        DATABASE_URL,
+        connect_args={"check_same_thread": False},
+        echo=True,
+    )
 
 
-# 3. Create the dependency function that FastAPI will use
+def create_db_and_tables() -> None:
+    SQLModel.metadata.create_all(engine)
+
+
 def get_session():
     with Session(engine) as session:
         yield session

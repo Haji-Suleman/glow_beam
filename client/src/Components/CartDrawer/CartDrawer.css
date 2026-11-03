@@ -591,3 +591,12 @@
         transition: none;
     }
 }
+
+.cd-link {
+    color: inherit;
+    text-decoration: none;
+}
+
+.cd-link:hover {
+    text-decoration: underline;
+}

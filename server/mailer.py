@@ -1,35 +1,42 @@
+import html
 import os
 import smtplib
-import html
 from email.message import EmailMessage
-from schemas import SupportRequest
+
 from dotenv import load_dotenv
 
+from schemas import SupportRequest
+
+load_dotenv()
+
 SHOP_NAME = "GLOW BEAM"
+SMTP_HOST = os.getenv("SMTP_HOST", "smtp.hostinger.com")
+SMTP_PORT = int(os.getenv("SMTP_PORT", "465"))
 
 
-def send_support_email(payload: SupportRequest):
-    load_dotenv()  # Load environment variables from .env file
+def send_support_email(payload: SupportRequest) -> None:
     sender_email = os.getenv("PROF_GMAIL")
     sender_password = os.getenv("PROF_PASSWORD")
-    print(sender_email, sender_password)
     if not sender_email or not sender_password:
         print("[mail] Missing PROF_GMAIL or PROF_PASSWORD environment variables.")
         return
 
-    # Escape user inputs to prevent HTML injection
+    # Raw values for the subject and plain text
+    order_raw = payload.orderNumber or "N/A"
+    phone_raw = payload.phone or "N/A"
+
+    # Escaped values for the HTML part only
     name = html.escape(payload.name)
     email = html.escape(payload.email)
-    order_num = html.escape(payload.orderNumber) if payload.orderNumber else "N/A"
-    phone = html.escape(payload.phone) if payload.phone else "N/A"
+    order_num = html.escape(order_raw)
+    phone = html.escape(phone_raw)
     comment = html.escape(payload.comment).replace("\n", "<br>")
 
-    # Build the HTML email template
     html_content = f"""
     <div style="font-family:Arial,Helvetica,sans-serif;max-width:560px;margin:0 auto;padding:24px;color:#27233a;line-height:1.5;">
       <h2 style="margin:0 0 16px;font-size:22px;color:#c4547e;">New Support Request</h2>
       <p style="margin:0 0 12px;">You have received a new message from the contact form.</p>
-      
+
       <table role="presentation" cellpadding="8" cellspacing="0" border="1" style="width:100%; border-collapse: collapse; border-color: #ebd3da; margin-bottom: 20px;">
         <tr>
           <td style="background-color:#fdf8f9; width:120px;"><strong>Name:</strong></td>
@@ -60,34 +67,29 @@ def send_support_email(payload: SupportRequest):
     </div>
     """
 
-    # Plain text fallback
-    text_content = f"""
-    New Support Request
-    -------------------
-    Name: {name}
-    Email: {email}
-    Order Number: {order_num}
-    Phone: {phone}
-    
-    Message:
-    {payload.comment}
-    """
+    text_content = (
+        "New Support Request\n"
+        "-------------------\n"
+        f"Name: {payload.name}\n"
+        f"Email: {payload.email}\n"
+        f"Order Number: {order_raw}\n"
+        f"Phone: {phone_raw}\n\n"
+        "Message:\n"
+        f"{payload.comment}\n"
+    )
 
-    # Create the email
     msg = EmailMessage()
-    msg["Subject"] = f"Support Request: {name} - {order_num}"
+    msg["Subject"] = f"Support Request: {payload.name} - {order_raw}"
     msg["From"] = f'"{SHOP_NAME}" <{sender_email}>'
-    msg["To"] = sender_email  # Sends to yourself
-    msg["Reply-To"] = email  # Lets you reply directly to the customer
+    msg["To"] = sender_email  # sends to yourself
+    msg["Reply-To"] = payload.email  # reply goes straight to the customer
     msg.set_content(text_content)
     msg.add_alternative(html_content, subtype="html")
 
-    # Send via Hostinger
     try:
-        # Port 465 requires SMTP_SSL
-        with smtplib.SMTP_SSL("smtp.hostinger.com", 465, timeout=10) as server:
+        with smtplib.SMTP_SSL(SMTP_HOST, SMTP_PORT, timeout=10) as server:
             server.login(sender_email, sender_password)
             server.send_message(msg)
-            print(f"[mail] Support email sent successfully for {email}")
+        print(f"[mail] Support email sent for {payload.email}")
     except Exception as e:
         print(f"[mail] FAILED to send email: {e}")

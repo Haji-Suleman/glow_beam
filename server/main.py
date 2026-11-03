@@ -1,37 +1,58 @@
+import os
+from contextlib import asynccontextmanager
+
+from dotenv import load_dotenv
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from sqlmodel import SQLModel
-from database import engine  # Import the database engine
 
-# Import your routers
+from database import create_db_and_tables
+
+# Import routers (this also imports the models they use, so the tables get registered)
 from routers import support
-from routers import cart  # Import the new cart router
+from routers import cart
+from routers import admin
 
-app = FastAPI()
+load_dotenv()
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    create_db_and_tables()  # creates missing tables on startup
+    yield
+
+
+app = FastAPI(lifespan=lifespan)
 
 # ---- CORS ----
+origins = [
+    "http://localhost:3000",
+    "http://localhost:5173",
+    "http://127.0.0.1:3000",
+    "http://127.0.0.1:5173",
+]
+
+# Production frontend URL(s), comma separated, set on the host:
+# FRONTEND_URLS=https://yourshop.com,https://www.yourshop.com
+extra = os.getenv("FRONTEND_URLS", "")
+origins += [u.strip().rstrip("/") for u in extra.split(",") if u.strip()]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "http://localhost:3000",
-        "http://localhost:5173",
-        "http://127.0.0.1:3000",
-        "http://127.0.0.1:5173",
-    ],
+    allow_origins=origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-
-# ---- Create Database Tables ----
-# This looks at all your SQLModel models (like your Cart model)
-# and creates the tables in the database if they don't exist.
-@app.on_event("startup")
-def on_startup():
-    SQLModel.metadata.create_all(engine)
+app.include_router(admin.router)
+print("ADMIN_KEY loaded:", bool(os.getenv("ADMIN_KEY")))
 
 
-# ---- Register Routers ----
+@app.get("/")
+def health():
+    return {"status": "ok"}
+
+
+# ---- Routers ----
 app.include_router(support.router)
-app.include_router(cart.router)  # Register the cart router
+app.include_router(cart.router)

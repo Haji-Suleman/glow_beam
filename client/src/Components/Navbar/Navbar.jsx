@@ -2,7 +2,7 @@ import { useState } from "react";
 import "./Navbar.css";
 
 // Change these to your own brand and pages
-const BRAND_NAME = "Your Brand";
+const BRAND_NAME = "https://saybeam.com/cdn/shop/files/hf_20260702_185356_1970da54-ea46-4d2f-8de9-6281a343d05f.png?v=1783021984&width=500";
 const ANNOUNCEMENT = "90-day money-back guarantee";
 import { useStore } from "../../Store/StoreContext";
 const LINKS = [
@@ -90,7 +90,7 @@ export default function Navbar({ cartCount = 0 }) {
 
                 {/* Swap this text for an <img src="/logo.png" alt={BRAND_NAME} /> when you have a logo */}
                 <a href="/" className="navbar__logo">
-                    {BRAND_NAME}
+                    <img src={BRAND_NAME} alt="" />
                 </a>
 
                 <div className="navbar__actions">

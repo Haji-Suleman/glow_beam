@@ -26,7 +26,7 @@ function CheckIcon() {
 //    Only show a rating or review count if it is real.
 export default function Hero({
     ratingText = "Your rating or review count goes here",
-    title = "Your Product Name —",
+    title = "The Sculpt Brief —",
     highlight = "one clear promise about what it does for your customer",
     description = "Two or three sentences about your product: what it is, who it is for, and why it is worth buying. Keep it short and specific.",
     bullets = ["First key benefit", "Second key benefit", "Third key benefit"],

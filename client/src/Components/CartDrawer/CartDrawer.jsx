@@ -1,11 +1,21 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
+import { Link } from 'react-router-dom';
 import './CartDrawer.css';
 import { useStore } from '../../Store/StoreContext';
 import { PRODUCTS, formatPrice } from '../../Store/Products/Products';
-import { COLOR_HEX, UPSELL_OFF, upsellPrice } from '../../Store/cartConfig';
+import {
+    COLOR_HEX, UPSELL_OFF, upsellPrice,
+    ADDONS, MAIN_SLUGS, UPSELL_ADDONS, addonDisplayPrice,
+} from '../../Store/cartConfig';
 
 // Put your own avatar images here
-const AVATARS = ['https://randomuser.me/api/portraits/women/1.jpg', 'https://randomuser.me/api/portraits/women/2.jpg', 'https://randomuser.me/api/portraits/women/3.jpg', 'https://randomuser.me/api/portraits/women/68.jpg'];
+const AVATARS = [
+    'https://randomuser.me/api/portraits/women/1.jpg',
+    'https://randomuser.me/api/portraits/women/2.jpg',
+    'https://randomuser.me/api/portraits/women/3.jpg',
+    'https://randomuser.me/api/portraits/women/68.jpg',
+];
+
 const PAYMENTS = [
     { name: 'Amazon', src: 'https://moonbundle-assets.fra1.cdn.digitaloceanspaces.com/cart-svg/amazon.svg' },
     { name: 'Apple Pay', src: 'https://moonbundle-assets.fra1.cdn.digitaloceanspaces.com/cart-svg/applePayTwo.svg' },
@@ -33,7 +43,6 @@ const Icon = {
             <path d="M20.6 12.6l-8-8A2 2 0 0011.2 4H5a1 1 0 00-1 1v6.2a2 2 0 00.6 1.4l8 8a2 2 0 002.8 0l5.2-5.2a2 2 0 000-2.8zM7.5 9A1.5 1.5 0 119 7.5 1.5 1.5 0 017.5 9z" />
         </svg>
     ),
-    // UPDATED: New Gift Card SVG
     gift: (
         <svg width="24" height="24" viewBox="-8 -8 80 80" fill="currentColor">
             <g>
@@ -66,6 +75,9 @@ const Icon = {
     ),
 };
 
+/* ------------------------------------------------------------------ */
+/*  Helpers                                                            */
+/* ------------------------------------------------------------------ */
 const useCountdown = (expiresAt, active) => {
     const [left, setLeft] = useState(() =>
         expiresAt ? Math.max(0, Math.round((expiresAt - Date.now()) / 1000)) : 0
@@ -88,10 +100,33 @@ const useCountdown = (expiresAt, active) => {
     return `${mm}:${ss}`;
 };
 
-const UpsellCard = ({ product, onAdd }) => {
+// Page URL for a cart line (null = no page, render plain text)
+const lineHref = (l) => {
+    if (l.type === 'addon') {
+        const slug = ADDONS[l.id]?.slug;
+        return slug ? `/products/${slug}` : null;
+    }
+    return l.id ? `/products/${l.id.toLowerCase()}` : null;
+};
+
+// Wraps children in a Link when there is a href, otherwise renders them as-is
+const CardLink = ({ href, onNavigate, className, children }) =>
+    href ? (
+        <Link to={href} onClick={onNavigate} className={className}>
+            {children}
+        </Link>
+    ) : (
+        <>{children}</>
+    );
+
+/* ------------------------------------------------------------------ */
+/*  Upsell cards                                                       */
+/* ------------------------------------------------------------------ */
+const UpsellCard = ({ product, onAdd, onNavigate }) => {
     const [color, setColor] = useState(product.colors?.[0] ?? '');
     const [size, setSize] = useState(product.sizes?.[0] ?? '');
     const off = UPSELL_OFF[product.slug] || 0;
+    const href = product.slug ? `/products/${product.slug}` : null;
 
     const idx = product.colorImages?.[color];
     const rawImg =
@@ -104,10 +139,16 @@ const UpsellCard = ({ product, onAdd }) => {
 
     return (
         <li className="cd-up">
-            <img className="cd-up__img" src={img} alt={product.name} />
+            <CardLink href={href} onNavigate={onNavigate}>
+                <img className="cd-up__img" src={img} alt={product.name} />
+            </CardLink>
             <div className="cd-up__body">
                 <div className="cd-up__top">
-                    <h4>{product.name}</h4>
+                    <h4>
+                        <CardLink href={href} onNavigate={onNavigate} className="cd-link">
+                            {product.name}
+                        </CardLink>
+                    </h4>
                     {off > 0 && <span className="cd-off cd-off--sm">{formatPrice(off)} OFF</span>}
                 </div>
                 <p className="cd-up__price">
@@ -140,6 +181,36 @@ const UpsellCard = ({ product, onAdd }) => {
     );
 };
 
+const AddonCard = ({ addon, price, onAdd, onNavigate }) => {
+    const href = addon.slug ? `/products/${addon.slug}` : null;
+    return (
+        <li className="cd-up">
+            <CardLink href={href} onNavigate={onNavigate}>
+                <img className="cd-up__img" src={addon.image} alt={addon.name} />
+            </CardLink>
+            <div className="cd-up__body">
+                <div className="cd-up__top">
+                    <h4>
+                        <CardLink href={href} onNavigate={onNavigate} className="cd-link">
+                            {addon.name.split(' — ')[0]}
+                        </CardLink>
+                    </h4>
+                </div>
+                <p className="cd-up__price">
+                    {addon.compare > price && <s>{formatPrice(addon.compare)}</s>}{' '}
+                    <strong>{price === 0 ? 'FREE' : formatPrice(price)}</strong>
+                </p>
+                <div className="cd-up__row">
+                    <button type="button" className="cd-add" onClick={() => onAdd(addon)}>ADD</button>
+                </div>
+            </div>
+        </li>
+    );
+};
+
+/* ------------------------------------------------------------------ */
+/*  Drawer                                                             */
+/* ------------------------------------------------------------------ */
 const CartDrawer = () => {
     const {
         lines, count, subtotal, savings, isOpen, closeCart,
@@ -161,13 +232,39 @@ const CartDrawer = () => {
         };
     }, [isOpen, closeCart]);
 
-    const upsellProducts = PRODUCTS.filter((p) => UPSELL_OFF[p.slug] !== undefined);
-    const pages = Math.max(1, Math.ceil(upsellProducts.length / PAGE_SIZE));
+    // Close the drawer and show the new page from the top
+    const handleNavigate = () => {
+        closeCart();
+        window.scrollTo(0, 0);
+    };
+
+    // Does the cart contain a main product? (decides if gifts are free)
+    const hasMain = lines.some((l) => l.type === 'product' && MAIN_SLUGS.includes(l.id));
+
+    // One combined list: add-ons first, then products
+    const suggestions = useMemo(() => {
+        const addons = UPSELL_ADDONS
+            .map((id) => ADDONS[id])
+            .filter(Boolean)
+            .filter((a) => !lines.some((l) => l.type === 'addon' && l.id === a.id))
+            .map((a) => ({ kind: 'addon', key: `addon-${a.id}`, data: a }));
+
+        const products = PRODUCTS
+            .filter((p) => UPSELL_OFF[p.slug] !== undefined)
+            .map((p) => ({ kind: 'product', key: `product-${p.id}`, data: p }));
+
+        return [...addons, ...products];
+    }, [lines]);
+
+    const pages = Math.max(1, Math.ceil(suggestions.length / PAGE_SIZE));
     const safePage = Math.min(page, pages - 1);
-    const visible = upsellProducts.slice(safePage * PAGE_SIZE, safePage * PAGE_SIZE + PAGE_SIZE);
+    const visible = suggestions.slice(safePage * PAGE_SIZE, safePage * PAGE_SIZE + PAGE_SIZE);
 
     const handleUpsellAdd = (p, color, size) =>
         addToCart({ id: p.slug, color, size, deal: 'upsell' }, { open: false });
+
+    const handleAddonAdd = (a) =>
+        addToCart({ type: 'addon', id: a.id }, { open: false });
 
     return (
         <>
@@ -206,55 +303,87 @@ const CartDrawer = () => {
                         </div>
 
                         <ul className="cd-items">
-                            {lines.map((l) => (
-                                <li className="cd-item" key={l.key}>
-                                    <img className="cd-item__img" src={l.image} alt={l.name} />
-                                    <div className="cd-item__main">
-                                        <h4>{l.name}</h4>
-                                        {l.variant && <p className="cd-item__variant">{l.variant}</p>}
-                                        <div className="cd-item__actions">
-                                            <div className="cd-qty">
-                                                <button type="button" disabled={l.qty <= 1} onClick={() => setQty(l.key, l.qty - 1)} aria-label="Decrease">−</button>
-                                                <span>{l.qty}</span>
-                                                <button type="button" disabled={l.qty >= l.maxQty} onClick={() => setQty(l.key, l.qty + 1)} aria-label="Increase">+</button>
+                            {lines.map((l) => {
+                                const href = lineHref(l);
+                                return (
+                                    <li className="cd-item" key={l.key}>
+                                        <CardLink href={href} onNavigate={handleNavigate}>
+                                            <img className="cd-item__img" src={l.image} alt={l.name} />
+                                        </CardLink>
+                                        <div className="cd-item__main">
+                                            <h4>
+                                                <CardLink href={href} onNavigate={handleNavigate} className="cd-link">
+                                                    {l.name}
+                                                </CardLink>
+                                            </h4>
+                                            {l.variant && <p className="cd-item__variant">{l.variant}</p>}
+                                            <div className="cd-item__actions">
+                                                <div className="cd-qty">
+                                                    <button type="button" disabled={l.qty <= 1} onClick={() => setQty(l.key, l.qty - 1)} aria-label="Decrease">−</button>
+                                                    <span>{l.qty}</span>
+                                                    <button type="button" disabled={l.qty >= l.maxQty} onClick={() => setQty(l.key, l.qty + 1)} aria-label="Increase">+</button>
+                                                </div>
+                                                <button type="button" className="cd-trash" onClick={() => removeLine(l.key)} aria-label="Remove">{Icon.trash}</button>
                                             </div>
-                                            <button type="button" className="cd-trash" onClick={() => removeLine(l.key)} aria-label="Remove">{Icon.trash}</button>
+                                            {l.tag && <p className="cd-item__tag">{Icon.tag} {l.tag}</p>}
                                         </div>
-                                        {l.tag && <p className="cd-item__tag">{Icon.tag} {l.tag}</p>}
-                                    </div>
-                                    <div className="cd-item__price">
-                                        <strong>{formatPrice(l.paid)}</strong>
-                                        {l.compare > l.paid && <s>{formatPrice(l.compare)}</s>}
-                                        {!l.gift && l.compare > l.paid && (
-                                            <span className="cd-off">{formatPrice(l.compare - l.paid)} OFF</span>
-                                        )}
-                                        {l.gift && <span className="cd-gift">{Icon.gift}</span>}
-                                    </div>
-                                </li>
-                            ))}
+                                        <div className="cd-item__price">
+                                            <strong>{formatPrice(l.paid)}</strong>
+                                            {l.compare > l.paid && <s>{formatPrice(l.compare)}</s>}
+                                            {!l.gift && l.compare > l.paid && (
+                                                <span className="cd-off">{formatPrice(l.compare - l.paid)} OFF</span>
+                                            )}
+                                            {l.gift && <span className="cd-gift">{Icon.gift}</span>}
+                                        </div>
+                                    </li>
+                                );
+                            })}
                         </ul>
 
-                        <div className="cd-upsell-head">
-                            <h4>{Icon.flame} You Might Also Like</h4>
-                            <div className="cd-pager">
-                                <button
-                                    type="button"
-                                    disabled={safePage === 0}
-                                    onClick={() => setPage(Math.max(0, safePage - 1))}
-                                    aria-label="Previous"
-                                >{Icon.left}</button>
-                                <span>{safePage + 1}/{pages}</span>
-                                <button
-                                    type="button"
-                                    disabled={safePage >= pages - 1}
-                                    onClick={() => setPage(Math.min(pages - 1, safePage + 1))}
-                                    aria-label="Next"
-                                >{Icon.right}</button>
-                            </div>
-                        </div>
-                        <ul className="cd-upsell">
-                            {visible.map((p) => <UpsellCard key={p.id} product={p} onAdd={handleUpsellAdd} />)}
-                        </ul>
+                        {suggestions.length > 0 && (
+                            <>
+                                <div className="cd-upsell-head">
+                                    <h4>{Icon.flame} You Might Also Like</h4>
+                                    {pages > 1 && (
+                                        <div className="cd-pager">
+                                            <button
+                                                type="button"
+                                                disabled={safePage === 0}
+                                                onClick={() => setPage(Math.max(0, safePage - 1))}
+                                                aria-label="Previous"
+                                            >{Icon.left}</button>
+                                            <span>{safePage + 1}/{pages}</span>
+                                            <button
+                                                type="button"
+                                                disabled={safePage >= pages - 1}
+                                                onClick={() => setPage(Math.min(pages - 1, safePage + 1))}
+                                                aria-label="Next"
+                                            >{Icon.right}</button>
+                                        </div>
+                                    )}
+                                </div>
+                                <ul className="cd-upsell">
+                                    {visible.map((s) =>
+                                        s.kind === 'addon' ? (
+                                            <AddonCard
+                                                key={s.key}
+                                                addon={s.data}
+                                                price={addonDisplayPrice(s.data, hasMain)}
+                                                onAdd={handleAddonAdd}
+                                                onNavigate={handleNavigate}
+                                            />
+                                        ) : (
+                                            <UpsellCard
+                                                key={s.key}
+                                                product={s.data}
+                                                onAdd={handleUpsellAdd}
+                                                onNavigate={handleNavigate}
+                                            />
+                                        )
+                                    )}
+                                </ul>
+                            </>
+                        )}
                     </div>
                 )}
 
@@ -266,7 +395,6 @@ const CartDrawer = () => {
                     </div>
                     <button type="button" className="cd-checkout" disabled={lines.length === 0} onClick={checkout}>CHECKOUT</button>
                     <div className="cd-pay">
-                        {/* FIX: key={p.name} instead of key={p} because `p` is an object */}
                         {PAYMENTS.map((p) => <img key={p.name} src={p.src} alt={p.name} />)}
                     </div>
                     <p className="cd-risk">{Icon.check} Try risk-free: 90 days, love it or your money back</p>

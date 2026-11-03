@@ -1,7 +1,7 @@
 import React, {
     createContext, useContext, useEffect, useMemo, useReducer, useRef, useState, useCallback,
 } from 'react';
-import { resolveLine, applyBogo } from './cartConfig';
+import { resolveLine, applyBogo, applyGifts } from './cartConfig';
 
 const CART_KEY = 'saybeam_cart_v1';
 const SESSION_KEY = 'saybeam_session_id';
@@ -80,7 +80,7 @@ export const StoreProvider = ({ children }) => {
     // FIX: applyBogo is restored here (was on a deleted module-scope line).
     // Display data comes from product data, so prices stay fresh.
     const lines = useMemo(
-        () => applyBogo(stored.map(resolveLine).filter(Boolean)),
+        () => applyGifts(applyBogo(stored.map(resolveLine).filter(Boolean))),
         [stored]
     );
 

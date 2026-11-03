@@ -34,7 +34,7 @@ const IMG = {
     bundle: "/images/brief-black.png",
     brush: "https://res.cloudinary.com/fozdhxik/image/upload/v1792919369/13_200x200_4e0b8349-d68d-4d88-805a-a460974ffabb.png",
     ebook: "https://saybeam.com/cdn/shop/files/hf_20260628_062226_f031e89c-5f4d-4ce4-9f1f-7244a5abae1b.png?v=1782627998",
-    gift: "/images/gift-card.png",
+    gift: "https://saybeam.com/cdn/shop/files/hf_20260701_140626_e734817e-4fad-4492-9ca5-23a6a67f23aa.png?v=1782914958",
     wear1: "https://res.cloudinary.com/fozdhxik/video/upload/v1792923851/e1daf45fa99a4960af6821b1ab1f9f30.mp4",
     wear2: "https://res.cloudinary.com/fozdhxik/video/upload/v1792924166/8b46fbb68d7e4b819ae01dc6ae2f6e62.mp4",
     avatars: ["https://res.cloudinary.com/fozdhxik/image/upload/v1792914522/65.jpg", "https://res.cloudinary.com/fozdhxik/image/upload/v1792914565/68.jpg", "https://res.cloudinary.com/fozdhxik/image/upload/v1792914592/76.jpg"],
@@ -419,25 +419,7 @@ function Info() {
                 </div>
                 <div>
                     <s>Rs.2,807.84</s>
-
-                    <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="-8 -8 80 80"
-                        fill="currentColor"
-                        style={{ width: '100%', height: 'auto', maxHeight: '80px', display: 'block', margin: '0 auto' }}
-                    >
-                        <g>
-                            <path d="M 8 28 L 8 58 C 8 59.12 8.88 60 10 60 L 54 60 C 55.12 60 56 59.12 56 58 L 56 28 L 36 28 L 36 60 L 28 60 L 28 28 Z"></path>
-                        </g>
-                        <g>
-                            <path d="M 0 16 C 0 13.8 1.8 12 4 12 L 28 12 L 28 24 L 4 24 C 1.8 24 0 22.2 0 20 Z"></path>
-                            <path d="M 36 12 L 60 12 C 62.2 12 64 13.8 64 16 L 64 20 C 64 22.2 62.2 24 60 24 L 36 24 Z"></path>
-                            <path d="M 28 12 Q 12 12 8 6 Q 6 2 10 2 Q 16 2 22 6 Q 28 10 28 12" fill="none" stroke="currentColor" strokeWidth="4.8" strokeLinejoin="round"></path>
-                            <path d="M 36 12 Q 52 12 56 6 Q 58 2 54 2 Q 48 2 42 6 Q 36 10 36 12" fill="none" stroke="currentColor" strokeWidth="4.8" strokeLinejoin="round"></path>
-                            <rect x="28" y="8" width="8" height="8" fill="currentColor" transform="rotate(45 32 12)"></rect>
-                        </g>
-                    </svg>
-
+                    <img src={IMG.gift} alt="" />
                     <p>Free $10 Gift Card</p>
                 </div>
             </div>

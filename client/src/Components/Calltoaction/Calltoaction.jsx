@@ -28,12 +28,12 @@ function ShieldIcon() {
 //    Only mention a guarantee or shipping promise that you really offer.
 export default function CallToAction({
     image = CTA_IMAGE,
-    imageAlt = "Your product",
-    title = "Your closing headline",
-    highlight = "in italic?",
-    description = "One or two sentences that remind customers why they should buy now. Keep it short and honest.",
-    ctaLabel = "Shop now",
-    ctaHref = "/shop",
+    imageAlt = "The Sculpt Brief",
+    title = "Ready To Feal Like",
+    highlight = "Yourself Again?",
+    description = "Join thousands of moms who chose the Sculpt Brief to support the postpartum belly the way the gym and diet can't. 360° compression. Invisible under anything. Worn in seconds.",
+    ctaLabel = "Shop The Sculp Brief",
+    ctaHref = "/https://saybeam.com/products/saybeam-sculpt-brief",
     guarantee = { bold: "Your guarantee", rest: ", explained in a few words" },
     trustItems = [
         "First trust point",
