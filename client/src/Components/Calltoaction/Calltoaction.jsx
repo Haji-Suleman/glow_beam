@@ -1,4 +1,4 @@
-import "./CalltoAction.css";
+import "./Calltoaction.css";
 
 // 1. Paste your Cloudinary image URL here.
 //    Keep "c_fill,g_auto,w_400,h_400,f_auto,q_auto" in it: it crops the image
