@@ -1,4 +1,4 @@
-import "./CustomerService.css";
+import "./Customerservice.css";
 
 // Small outline icons, drawn in the accent color
 const ICONS = {

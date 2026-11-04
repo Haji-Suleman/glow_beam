@@ -1,6 +1,6 @@
 import { useEffect, useId, useMemo } from "react";
 import { buildCountryOptions } from "../../Store/Country/Countries.js";
-import useCountry from "../../Store/Country/UseCountry.js";
+import useCountry from "../../Store/Country/Usecountry.js";
 import "./Footer.css";
 import { PAYMENTS } from "../ShopHero/ShopHero.jsx";
 
