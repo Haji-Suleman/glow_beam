@@ -17,4 +17,3 @@ def support_request(payload: SupportRequest, background_tasks: BackgroundTasks):
         "message": "Support request received",
         "data": payload.model_dump(),
     }
-2

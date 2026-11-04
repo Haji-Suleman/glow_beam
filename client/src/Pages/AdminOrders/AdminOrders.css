@@ -1,0 +1,87 @@
+.adm-ordno {
+    display: grid;
+    place-items: center;
+    min-width: 64px;
+    height: 44px;
+    padding: 0 10px;
+    border-radius: 10px;
+    background: #f8edf3;
+    color: #b9477f;
+    font-weight: 800;
+    font-size: 14px;
+}
+
+.adm-pill--pending {
+    background: #fff3d6;
+    color: #8a5a00;
+}
+
+.adm-pill--confirmed {
+    background: #e3ecfb;
+    color: #1d4ea0;
+}
+
+.adm-pill--shipped {
+    background: #efe3fa;
+    color: #6b2d86;
+}
+
+.adm-pill--delivered {
+    background: #dff5e6;
+    color: #14753a;
+}
+
+.adm-pill--cancelled {
+    background: #fdecee;
+    color: #b3202a;
+}
+
+.adm-order {
+    border-top: 1px solid var(--line);
+    background: #fcfbfd;
+    padding: 14px 18px 18px;
+}
+
+.adm-order__info p {
+    margin: 4px 0;
+    font-size: 14px;
+}
+
+.adm-order__info strong {
+    display: inline-block;
+    width: 70px;
+    color: var(--muted);
+    font-weight: 600;
+}
+
+.adm-order .adm-lines {
+    padding: 8px 0;
+    margin: 10px 0;
+    background: transparent;
+    border-top: 1px solid var(--line);
+}
+
+.adm-order__edit {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 12px;
+    align-items: end;
+}
+
+.adm-order__edit label {
+    display: grid;
+    gap: 5px;
+    font-size: 12px;
+    color: var(--muted);
+    font-weight: 600;
+}
+
+.adm-order__edit input,
+.adm-order__edit select {
+    padding: 10px 12px;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    font: inherit;
+    font-size: 14px;
+    background: #fff;
+}

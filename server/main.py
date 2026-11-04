@@ -5,14 +5,14 @@ from dotenv import load_dotenv
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
+load_dotenv()
 from database import create_db_and_tables
 
 # Import routers (this also imports the models they use, so the tables get registered)
 from routers import support
 from routers import cart
 from routers import admin
-
-load_dotenv()
+from routers import orders
 
 
 @asynccontextmanager
@@ -45,6 +45,7 @@ app.add_middleware(
 )
 
 app.include_router(admin.router)
+app.include_router(orders.router)
 print("ADMIN_KEY loaded:", bool(os.getenv("ADMIN_KEY")))
 
 

@@ -1,37 +1,56 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import './AdminProducts.css';
+import AdminOrders from '../AdminOrders/AdminOrders';
 import { PRODUCTS, formatPrice } from '../../Store/Products/Products';
 import { ADDONS, COLOR_HEX, COLOR_IMAGES } from '../../Store/cartConfig';
 
 const API = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 const KEY_NAME = 'admin_key';
 
-/* ---------- helpers ---------- */
 const asArray = (v) => (Array.isArray(v) ? v : []);
 const strings = (v) => asArray(v).filter((x) => typeof x === 'string');
-
-// First usable image of a product: first gallery picture, else its image field
 const firstImage = (p) => strings(p?.gallery)[0] || (typeof p?.image === 'string' ? p.image : '');
 
-// The server sends UTC times without a "Z", so add it before parsing
 const fmtTime = (s) => {
     if (!s) return '';
     const d = new Date(/Z|[+-]\d\d:?\d\d$/.test(s) ? s : `${s}Z`);
     return d.toLocaleString([], { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' });
 };
 
-// Pictures that exist in the code, used when the database row has no image
+// Build the read-only catalog from hardcoded frontend files.
+const CATALOG = (() => {
+    const products = asArray(PRODUCTS).map((p) => ({
+        id: String(p.slug || p.id || ''),
+        slug: String(p.slug || p.id || ''),
+        kind: 'product',
+        name: String(p.name || p.title || ''),
+        price: Number(p.price) || 0,
+        compare_price: Number(p.compare || p.comparePrice) || 0,
+        image: firstImage(p),
+        colors: strings(p.colors),
+        sizes: strings(p.sizes),
+        gallery: strings(p.gallery),
+    }));
+
+    const addons = Object.values(ADDONS || {}).map((a) => ({
+        id: String(a.slug || a.id || ''),
+        slug: String(a.slug || a.id || ''),
+        kind: 'addon',
+        name: String(a.name || '').split(' — ')[0],
+        price: Number(a.price) || 0,
+        compare_price: Number(a.compare) || 0,
+        image: typeof a.image === 'string' ? a.image : '',
+        colors: [],
+        sizes: [],
+        gallery: typeof a.image === 'string' ? [a.image] : [],
+    }));
+
+    return [...products, ...addons].filter((it) => it.slug && it.name);
+})();
+
 const CODE_IMAGES = (() => {
     const m = {};
-    asArray(PRODUCTS).forEach((p) => {
-        const img = firstImage(p);
-        if (img) m[String(p.slug || p.id).toLowerCase()] = img;
-    });
-    Object.values(ADDONS || {}).forEach((a) => {
-        if (!a.image) return;
-        m[String(a.id).toLowerCase()] = a.image;
-        if (a.slug) m[String(a.slug).toLowerCase()] = a.image;
-    });
+    CATALOG.forEach((p) => { if (p.image) m[p.slug.toLowerCase()] = p.image; });
     return m;
 })();
 
@@ -49,12 +68,10 @@ const Stat = ({ label, value, tone }) => (
     </div>
 );
 
-/* ---------- page ---------- */
 export default function AdminProducts() {
     const [key, setKey] = useState(() => sessionStorage.getItem(KEY_NAME) || '');
     const [input, setInput] = useState('');
     const [tab, setTab] = useState('products');
-    const [products, setProducts] = useState([]);
     const [carts, setCarts] = useState([]);
     const [kind, setKind] = useState('all');
     const [search, setSearch] = useState('');
@@ -62,7 +79,7 @@ export default function AdminProducts() {
     const [openCart, setOpenCart] = useState(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
-    const [notice, setNotice] = useState('');
+    const [ordersTick, setOrdersTick] = useState(0);
 
     const signOut = useCallback(() => {
         sessionStorage.removeItem(KEY_NAME);
@@ -70,7 +87,9 @@ export default function AdminProducts() {
     }, []);
 
     const get = useCallback(async (path) => {
-        const res = await fetch(`${API}${path}`, { headers: { 'X-Admin-Key': key } });
+        const res = await fetch(`${API}${path}`, {
+            headers: { 'X-Admin-Key': key },
+        });
         if (res.status === 401) {
             signOut();
             throw new Error('Wrong admin key');
@@ -79,14 +98,14 @@ export default function AdminProducts() {
         return res.json();
     }, [key, signOut]);
 
+    // Only carts are loaded from the server now.
     const load = useCallback(async () => {
         if (!key) return;
         setLoading(true);
         setError('');
         try {
-            const [p, c] = await Promise.all([get('/api/admin/products'), get('/api/admin/carts')]);
-            setProducts(p);
-            setCarts(c);
+            const c = await get('/api/admin/carts');
+            setCarts(asArray(c));
         } catch (e) {
             setError(e.message);
         } finally {
@@ -96,6 +115,11 @@ export default function AdminProducts() {
 
     useEffect(() => { load(); }, [load]);
 
+    const refresh = () => {
+        load();
+        setOrdersTick((t) => t + 1);
+    };
+
     const login = (e) => {
         e.preventDefault();
         sessionStorage.setItem(KEY_NAME, input.trim());
@@ -103,73 +127,20 @@ export default function AdminProducts() {
         setInput('');
     };
 
-    const importFromCode = async () => {
-        setError('');
-        setNotice('');
-        try {
-            const list = asArray(PRODUCTS);
-            const addons = Object.values(ADDONS || {});
-
-            const items = [
-                ...list.map((p) => ({
-                    slug: String(p.slug || p.id || ''),
-                    kind: 'product',
-                    name: String(p.name || p.title || ''),
-                    price: Number(p.price) || 0,
-                    compare_price: Number(p.compare || p.comparePrice) || 0,
-                    image: firstImage(p),
-                    colors: strings(p.colors),
-                    sizes: strings(p.sizes),
-                    gallery: strings(p.gallery),
-                })),
-                ...addons.map((a) => ({
-                    slug: String(a.slug || a.id),
-                    kind: 'addon',
-                    name: String(a.name || '').split(' — ')[0],
-                    price: Number(a.price) || 0,
-                    compare_price: Number(a.compare) || 0,
-                    image: typeof a.image === 'string' ? a.image : '',
-                    gallery: typeof a.image === 'string' ? [a.image] : [],
-                })),
-            ].filter((it) => it.slug && it.name);
-
-            if (items.length === 0) throw new Error('Nothing to import. Check the console for the raw first product.');
-            console.log('Import payload (first item):', items[0], 'Raw first product:', list[0]);
-
-            const res = await fetch(`${API}/api/admin/products/import`, {
-                method: 'POST',
-                headers: { 'X-Admin-Key': key, 'Content-Type': 'application/json' },
-                body: JSON.stringify(items),
-            });
-            const text = await res.text();
-            if (!res.ok) throw new Error(`Server said ${res.status}: ${text}`);
-
-            const r = JSON.parse(text);
-            setNotice(`Imported ${r.created} new and updated ${r.updated}.`);
-            await load();
-        } catch (e) {
-            console.error(e);
-            setError(e.message);
-        }
-    };
-
-    /* image lookup: database first, then code */
-    const dbImages = useMemo(() => {
+    const catalogImages = useMemo(() => {
         const m = {};
-        products.forEach((p) => {
-            const img = firstImage(p);
-            if (img) m[String(p.slug).toLowerCase()] = img;
+        CATALOG.forEach((p) => {
+            if (p.image) m[p.slug.toLowerCase()] = p.image;
         });
         return m;
-    }, [products]);
+    }, []);
 
     const itemImage = (it) => {
         const slug = String(it.slug || '').toLowerCase();
         if (slug === 'glowbeam-sculpt-brief' && COLOR_IMAGES[it.color]) return COLOR_IMAGES[it.color];
-        return dbImages[slug] || CODE_IMAGES[slug] || '';
+        return catalogImages[slug] || CODE_IMAGES[slug] || '';
     };
 
-    /* ---------- login ---------- */
     if (!key) {
         return (
             <div className="adm-auth">
@@ -178,7 +149,7 @@ export default function AdminProducts() {
                     <h1>Admin</h1>
                     <p>Enter your admin key to continue.</p>
                     <input
-                        type="text"
+                        type="password"
                         placeholder="Admin key"
                         value={input}
                         onChange={(e) => setInput(e.target.value)}
@@ -191,12 +162,12 @@ export default function AdminProducts() {
         );
     }
 
-    /* ---------- derived data ---------- */
-    const shownProducts = products.filter((p) => {
+    const shownProducts = CATALOG.filter((p) => {
         if (kind !== 'all' && p.kind !== kind) return false;
         return `${p.name} ${p.slug}`.toLowerCase().includes(search.toLowerCase());
     });
-    const shownCarts = carts.filter((c) => !cartFilter || c.status === cartFilter);
+
+    const shownCarts = carts.filter((c) => c.item_count > 0 && (!cartFilter || c.status === cartFilter));
     const withItems = carts.filter((c) => c.item_count > 0);
     const checkoutCount = carts.filter((c) => c.status === 'checkout').length;
     const openValue = withItems.reduce((s, c) => s + (c.subtotal || 0), 0);
@@ -214,30 +185,35 @@ export default function AdminProducts() {
 
                 <nav className="adm-tabs">
                     <button type="button" className={tab === 'products' ? 'is-on' : ''} onClick={() => setTab('products')}>
-                        Products <em>{products.length}</em>
+                        Products <em>{CATALOG.length}</em>
                     </button>
                     <button type="button" className={tab === 'carts' ? 'is-on' : ''} onClick={() => setTab('carts')}>
                         Carts <em>{withItems.length}</em>
                     </button>
+                    <button type="button" className={tab === 'orders' ? 'is-on' : ''} onClick={() => setTab('orders')}>
+                        Orders
+                    </button>
                 </nav>
 
                 <div className="adm-actions">
-                    <button type="button" className="adm-btn adm-btn--ghost" onClick={load}>Refresh</button>
+                    <button type="button" className="adm-btn adm-btn--ghost" onClick={refresh}>Refresh</button>
                     <button type="button" className="adm-btn adm-btn--ghost" onClick={signOut}>Sign out</button>
                 </div>
             </header>
 
             <main className="adm-main">
                 {error && <p className="adm-msg adm-msg--err">{error}</p>}
-                {notice && <p className="adm-msg adm-msg--ok">{notice}</p>}
 
-                {/* ================= PRODUCTS ================= */}
+                {tab === 'orders' && (
+                    <AdminOrders adminKey={key} onAuthError={signOut} refresh={ordersTick} />
+                )}
+
                 {tab === 'products' && (
                     <>
                         <div className="adm-stats">
-                            <Stat label="Products" value={products.filter((p) => p.kind === 'product').length} />
-                            <Stat label="Add-ons" value={products.filter((p) => p.kind === 'addon').length} />
-                            <Stat label="Total items" value={products.length} />
+                            <Stat label="Products" value={CATALOG.filter((p) => p.kind === 'product').length} />
+                            <Stat label="Add-ons" value={CATALOG.filter((p) => p.kind === 'addon').length} />
+                            <Stat label="Total items" value={CATALOG.length} />
                         </div>
 
                         <div className="adm-toolbar">
@@ -259,29 +235,17 @@ export default function AdminProducts() {
                                     </button>
                                 ))}
                             </div>
-                            <button type="button" className="adm-btn" onClick={importFromCode}>Import from code</button>
                         </div>
-
-                        {loading && products.length === 0 && <p className="adm-empty">Loading…</p>}
-                        {!loading && products.length === 0 && !error && (
-                            <p className="adm-empty">No products yet. Click “Import from code” to add them.</p>
-                        )}
-                        {products.length > 0 && shownProducts.length === 0 && (
-                            <p className="adm-empty">Nothing matches your search.</p>
-                        )}
 
                         <div className="adm-grid">
                             {shownProducts.map((p) => {
-                                const img = firstImage(p) || CODE_IMAGES[String(p.slug).toLowerCase()] || '';
-                                const colors = strings(p.colors);
-                                const sizes = strings(p.sizes);
                                 const off = p.compare_price > p.price
                                     ? Math.round((1 - p.price / p.compare_price) * 100)
                                     : 0;
                                 return (
-                                    <article className="adm-card" key={p.id}>
+                                    <article className="adm-card" key={p.slug}>
                                         <div className="adm-card__media">
-                                            <Thumb src={img} name={p.name} className="adm-card__img" />
+                                            <Thumb src={p.image} name={p.name} className="adm-card__img" />
                                             <span className={`adm-badge adm-badge--${p.kind}`}>
                                                 {p.kind === 'addon' ? 'Add-on' : 'Product'}
                                             </span>
@@ -297,18 +261,17 @@ export default function AdminProducts() {
                                                 {p.compare_price > p.price && <s>{formatPrice(p.compare_price)}</s>}
                                             </p>
 
-                                            {colors.length > 0 && (
-                                                <div className="adm-swatches" title={colors.join(', ')}>
-                                                    {colors.slice(0, 8).map((c) => (
+                                            {p.colors.length > 0 && (
+                                                <div className="adm-swatches">
+                                                    {p.colors.slice(0, 8).map((c) => (
                                                         <i key={c} style={{ background: COLOR_HEX[c] || '#d8d8de' }} title={c} />
                                                     ))}
-                                                    {colors.length > 8 && <small>+{colors.length - 8}</small>}
                                                 </div>
                                             )}
 
-                                            {sizes.length > 0 && (
+                                            {p.sizes.length > 0 && (
                                                 <div className="adm-sizes">
-                                                    {sizes.map((s) => <span key={s}>{s}</span>)}
+                                                    {p.sizes.map((s) => <span key={s}>{s}</span>)}
                                                 </div>
                                             )}
                                         </div>
@@ -319,7 +282,6 @@ export default function AdminProducts() {
                     </>
                 )}
 
-                {/* ================= CARTS ================= */}
                 {tab === 'carts' && (
                     <>
                         <div className="adm-stats">
@@ -344,7 +306,7 @@ export default function AdminProducts() {
                         </div>
 
                         {!loading && shownCarts.length === 0 && !error && (
-                            <p className="adm-empty">No carts yet. Add something to a cart on the shop.</p>
+                            <p className="adm-empty">No carts yet.</p>
                         )}
 
                         <div className="adm-carts">
@@ -363,24 +325,22 @@ export default function AdminProducts() {
                                                     <Thumb key={i} src={itemImage(it)} name={it.name} />
                                                 ))}
                                                 {items.length > 4 && <span className="adm-more">+{items.length - 4}</span>}
-                                                {items.length === 0 && <span className="adm-thumb adm-thumb--empty">–</span>}
                                             </span>
 
                                             <span className="adm-cart__meta">
-                                                <strong>{c.item_count} {c.item_count === 1 ? 'item' : 'items'}</strong>
-                                                <small>{fmtTime(c.updated_at)} · <code>{c.session_id.slice(0, 8)}</code></small>
+                                                <strong>{c.item_count} items</strong>
+                                                <small>{fmtTime(c.updated_at)}</small>
                                             </span>
 
                                             <span className={`adm-pill adm-pill--${c.status}`}>
-                                                {c.status === 'checkout' ? 'Checkout started' : 'Open'}
+                                                {c.status === 'checkout' ? 'Checkout' : 'Open'}
                                             </span>
 
                                             <span className="adm-cart__total">
                                                 <strong>{formatPrice(c.subtotal)}</strong>
-                                                {c.savings > 0 && <small>saved {formatPrice(c.savings)}</small>}
                                             </span>
 
-                                            <span className="adm-caret" aria-hidden="true">{isOpen ? '▴' : '▾'}</span>
+                                            <span className="adm-caret">{isOpen ? '▴' : '▾'}</span>
                                         </button>
 
                                         {isOpen && (
@@ -390,10 +350,7 @@ export default function AdminProducts() {
                                                         <Thumb src={itemImage(it)} name={it.name} />
                                                         <div className="adm-lines__name">
                                                             <strong>{String(it.name).split(' — ')[0]}</strong>
-                                                            <small>
-                                                                {[it.color, it.size].filter(Boolean).join(' · ') || it.kind}
-                                                                {it.deal ? ` · ${it.deal}` : ''}
-                                                            </small>
+                                                            <small>{[it.color, it.size].filter(Boolean).join(' · ')}</small>
                                                         </div>
                                                         <span className="adm-lines__qty">×{it.qty}</span>
                                                         <span className="adm-lines__price">
@@ -401,7 +358,6 @@ export default function AdminProducts() {
                                                         </span>
                                                     </li>
                                                 ))}
-                                                {items.length === 0 && <li className="adm-lines__empty">This cart is empty.</li>}
                                             </ul>
                                         )}
                                     </article>

@@ -18,6 +18,7 @@ function ShieldIcon() {
             strokeLinejoin="round"
             aria-hidden="true"
         >
+            
             <path d="M9 1.2l7 2.6v5.4c0 4.3-2.9 7.7-7 9.6-4.1-1.9-7-5.3-7-9.6V3.8l7-2.6z" />
             <path d="M5.8 9.8l2.3 2.3 4.2-4.4" />
         </svg>

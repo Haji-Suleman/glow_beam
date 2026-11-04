@@ -3,11 +3,15 @@ import { Link } from 'react-router-dom';
 import './ProductPopup.css';
 import { formatPrice } from '../../Store/Products/Products';
 
-const ProductPopup = ({ product, onClose }) => {
-    const [color, setColor] = useState(product.colors[0]);
-    const [size, setSize] = useState(product.sizes[1] || product.sizes[0]);
+import { useStore } from '../../Store/StoreContext';
 
-    // Close on Escape + lock page scroll while open
+const ProductPopup = ({ product, onClose }) => {
+    const [color, setColor] = useState(product.colors?.[0] || '');
+    const [size, setSize] = useState(product.sizes?.[1] || product.sizes?.[0] || '');
+
+    // 👇 Get the addToCart function from your store 👇
+    const { addToCart } = useStore();
+
     useEffect(() => {
         const onKey = (e) => e.key === 'Escape' && onClose();
         document.addEventListener('keydown', onKey);
@@ -20,8 +24,17 @@ const ProductPopup = ({ product, onClose }) => {
     }, [onClose]);
 
     const handleAddToCart = () => {
-        // Replace with your cart logic / API call
-        console.log('Add to cart:', { id: product.id, name: product.name, color, size });
+        // 👇 Build the item exactly how your cartReducer expects it 👇
+        addToCart({
+            type: 'product',
+            id: product.slug,      // Your cart resolves items by slug (l.id)
+            color: color,
+            size: size,
+            qty: 1,
+            deal: null
+        });
+
+        // Close the popup
         onClose();
     };
 
@@ -49,7 +62,7 @@ const ProductPopup = ({ product, onClose }) => {
                     <fieldset className="popup__option">
                         <legend>Color - <strong>{color}</strong></legend>
                         <div className="popup__pills">
-                            {product.colors.map((c) => (
+                            {product.colors?.map((c) => (
                                 <button
                                     key={c}
                                     type="button"
@@ -72,7 +85,7 @@ const ProductPopup = ({ product, onClose }) => {
                             value={size}
                             onChange={(e) => setSize(e.target.value)}
                         >
-                            {product.sizes.map((s) => (
+                            {product.sizes?.map((s) => (
                                 <option key={s} value={s}>{s}</option>
                             ))}
                         </select>
