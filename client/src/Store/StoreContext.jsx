@@ -6,7 +6,7 @@ import { resolveLine, applyBogo, applyGifts } from './cartConfig';
 const CART_KEY = 'saybeam_cart_v1';
 const SESSION_KEY = 'saybeam_session_id';
 const EXPIRY_KEY = 'saybeam_cart_expiry';
-const API = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+const API = "https://glow-beam-9qj2.vercel.app";
 const CART_MINUTES = 5;
 const SYNC_DELAY = 800; // ms, batches rapid clicks into one request
 
