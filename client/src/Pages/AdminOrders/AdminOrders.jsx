@@ -4,7 +4,7 @@ import { PRODUCTS, formatPrice } from '../../Store/Products/Products';
 import { ADDONS } from '../../Store/cartConfig.js';
 import './AdminOrders.css';
 
-const API = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+const API = "https://glow-beam-9qj2.vercel.app";
 const STATUSES = ['pending', 'confirmed', 'shipped', 'delivered', 'cancelled'];
 const PAYMENTS = ['unpaid', 'paid', 'refunded', 'failed'];
 

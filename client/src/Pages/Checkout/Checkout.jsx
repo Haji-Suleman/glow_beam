@@ -8,7 +8,7 @@ import { useStore } from '../../Store/StoreContext';
 // 1. IMPORT PRODUCTS HERE
 import { formatPrice, PRODUCTS } from '../../Store/Products/Products';
 
-const API = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+const API = "https://glow-beam-9qj2.vercel.app";
 const EMPTY = { name: '', email: '', phone: '', address: '', city: '', postal_code: '', note: '' };
 
 const Checkout = () => {

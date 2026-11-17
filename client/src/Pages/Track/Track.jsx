@@ -4,7 +4,7 @@ import Navbar from '../../Components/Navbar/Navbar';
 import CustomerService from '../../Components/CustomerService/Customerservice';
 import Footer from '../../Components/Footer/Footer';
 
-const API = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+const API = "https://glow-beam-9qj2.vercel.app";
 
 const Track = () => {
     // 1. Add state for all inputs

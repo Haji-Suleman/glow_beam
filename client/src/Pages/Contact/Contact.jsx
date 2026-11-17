@@ -10,7 +10,7 @@ import Navbar from '../../Components/Navbar/Navbar';
 // Config
 // ---------------------------------------------------------------------------
 // Set VITE_API_URL in your .env file for production; falls back to local dev.
-const API_URL = import.meta.env.VITE_API_URL ?? 'http://127.0.0.1:8000';
+const API_URL = "https://glow-beam-9qj2.vercel.app";
 const COMMENT_MAX = 1000;
 
 // ---------------------------------------------------------------------------

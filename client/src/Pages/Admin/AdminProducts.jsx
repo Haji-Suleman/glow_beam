@@ -5,7 +5,7 @@ import { PRODUCTS, formatPrice } from '../../Store/Products/Products';
 // 🚨 FIXED: Removed COLOR_IMAGES from the import
 import { ADDONS, COLOR_HEX } from '../../Store/cartConfig';
 
-const API = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+const API = "https://glow-beam-9qj2.vercel.app";
 const KEY_NAME = 'admin_key';
 
 const asArray = (v) => (Array.isArray(v) ? v : []);
