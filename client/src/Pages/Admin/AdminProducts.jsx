@@ -2,7 +2,8 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import './AdminProducts.css';
 import AdminOrders from '../AdminOrders/AdminOrders';
 import { PRODUCTS, formatPrice } from '../../Store/Products/Products';
-import { ADDONS, COLOR_HEX, COLOR_IMAGES } from '../../Store/cartConfig';
+// 🚨 FIXED: Removed COLOR_IMAGES from the import
+import { ADDONS, COLOR_HEX } from '../../Store/cartConfig';
 
 const API = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 const KEY_NAME = 'admin_key';
@@ -135,9 +136,29 @@ export default function AdminProducts() {
         return m;
     }, []);
 
+    // 🚨 FIXED: Dynamic image resolution for all products
     const itemImage = (it) => {
         const slug = String(it.slug || '').toLowerCase();
-        if (slug === 'glowbeam-sculpt-brief' && COLOR_IMAGES[it.color]) return COLOR_IMAGES[it.color];
+
+        // 1. Find the product in the raw PRODUCTS array to access colorImages
+        const product = PRODUCTS.find(p => String(p.slug).toLowerCase() === slug);
+
+        if (product) {
+            let idx;
+            // 2. Find the index for the selected color (case-insensitive)
+            if (product.colorImages && it.color) {
+                const cartColor = it.color.trim().toLowerCase();
+                const matchedKey = Object.keys(product.colorImages).find(
+                    key => key.trim().toLowerCase() === cartColor
+                );
+                if (matchedKey) idx = product.colorImages[matchedKey];
+            }
+            // 3. Return the exact variant image or fallback
+            const fallbackImg = idx !== undefined ? product.gallery?.[idx] : product.gallery?.[0];
+            if (fallbackImg || product.image) return fallbackImg || product.image;
+        }
+
+        // 4. Fallback to catalog dictionary (for add-ons)
         return catalogImages[slug] || CODE_IMAGES[slug] || '';
     };
 

@@ -95,7 +95,7 @@ const Track = () => {
                                 />
                             </div>
 
-                            <button type="submit" className="track-btn" disabled={loading}>
+                            <button type="submit" className="btn-pink track-btn" disabled={loading}>
                                 {loading ? 'Tracking...' : 'Track'}
                             </button>
                         </form>
@@ -119,7 +119,7 @@ const Track = () => {
                                 />
                             </div>
 
-                            <button type="submit" className="track-btn" disabled={loading}>
+                            <button type="submit" className="btn-pink track-btn" disabled={loading}>
                                 {loading ? 'Tracking...' : 'Track'}
                             </button>
                         </form>

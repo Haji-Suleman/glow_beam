@@ -34,7 +34,7 @@ export default function CallToAction({
     highlight = "Yourself Again?",
     description = "Join thousands of moms who chose the Sculpt Brief to support the postpartum belly the way the gym and diet can't. 360° compression. Invisible under anything. Worn in seconds.",
     ctaLabel = "Shop The Sculp Brief",
-    ctaHref = "/https://saybeam.com/products/saybeam-sculpt-brief",
+    ctaHref = "/products/saybeam-sculpt-brief",
     guarantee = { bold: "Your guarantee", rest: ", explained in a few words" },
     trustItems = [
         "First trust point",
@@ -62,7 +62,7 @@ export default function CallToAction({
 
                 <p className="cta__text">{description}</p>
 
-                <a href={ctaHref} className="cta__button">
+                <a href={ctaHref} className="btn-pink cta__button">
                     {ctaLabel}
                 </a>
 

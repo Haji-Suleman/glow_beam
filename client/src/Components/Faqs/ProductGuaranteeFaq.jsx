@@ -71,7 +71,7 @@ const ProductGuaranteeFaq = () => {
                     We're so sure the Saybeam Sculpt Brief will change how you feel in your clothes that we take on all the risk. Wear it for 90 days. If you don't see a smoother, flatter shape, or it's simply not for you, just reach out and we'll make it right, with a size exchange or your money back.
                 </p>
 
-                <button className="guarantee-btn btn-interactive">Get My Sculpt Brief</button>
+                <button className="btn-pink guarantee-btn btn-interactive">Get My Sculpt Brief</button>
 
                 <div className="guarantee-features">
                     <span>✓ 90-Day Fit Guarantee</span>
@@ -122,7 +122,7 @@ const ProductGuaranteeFaq = () => {
 
             {/* Bottom CTA */}
             <div className="bottom-cta-wrapper animate-fade-in-up delay-2">
-                <button className="bottom-cta-btn btn-interactive">Order Now – Ships in 24h</button>
+                <button className="btn-pink bottom-cta-btn btn-interactive">Order Now – Ships in 24h</button>
             </div>
 
         </div>

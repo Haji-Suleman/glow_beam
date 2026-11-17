@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { PRODUCTS, formatPrice } from '../../Store/Products/Products';
-import { ADDONS, COLOR_IMAGES } from '../../Store/cartConfig';
+// 🚨 FIXED: Removed COLOR_IMAGES from the import
+import { ADDONS } from '../../Store/cartConfig.js';
 import './AdminOrders.css';
 
 const API = import.meta.env.VITE_API_URL || 'http://localhost:8000';
@@ -17,6 +18,7 @@ const fmtTime = (s) => {
     return d.toLocaleString([], { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' });
 };
 
+// Fallback dictionary for generic items
 const CODE_IMAGES = (() => {
     const m = {};
     asArray(PRODUCTS).forEach((p) => {
@@ -76,7 +78,6 @@ export default function AdminOrders({ adminKey, onAuthError, refresh }) {
     const val = (o, k) => (edits[o.id]?.[k] !== undefined ? edits[o.id][k] : o[k] || '');
     const edit = (o, k, v) => setEdits((e) => ({ ...e, [o.id]: { ...e[o.id], [k]: v } }));
 
-    // Check if the current order has unsaved changes
     const hasChanges = (o) => {
         const e = edits[o.id];
         if (!e) return false;
@@ -110,11 +111,29 @@ export default function AdminOrders({ adminKey, onAuthError, refresh }) {
         .filter((o) => o.status !== 'cancelled')
         .reduce((s, o) => s + (Number(o.subtotal) || 0), 0);
 
+    // 🚨 FIXED: Dynamic image resolution for ALL products (not just the brief)
     const imageFor = useMemo(() => (it) => {
         const slug = String(it.slug || '').toLowerCase();
-        if (slug === 'glowbeam-sculpt-brief' && COLOR_IMAGES[it.color]) {
-            return COLOR_IMAGES[it.color];
+
+        // 1. Find the product in the catalog
+        const product = PRODUCTS.find(p => p.slug.toLowerCase() === slug);
+
+        if (product) {
+            let idx;
+            // 2. Find the index for the selected color (case-insensitive)
+            if (product.colorImages && it.color) {
+                const cartColor = it.color.trim().toLowerCase();
+                const matchedKey = Object.keys(product.colorImages).find(
+                    key => key.trim().toLowerCase() === cartColor
+                );
+                if (matchedKey) idx = product.colorImages[matchedKey];
+            }
+            // 3. Return the exact variant image or fallback to the first image
+            const fallbackImg = idx !== undefined ? product.gallery?.[idx] : product.gallery?.[0];
+            return fallbackImg || product.image || '';
         }
+
+        // 4. Fallback to generic lookup for addons
         return CODE_IMAGES[slug] || '';
     }, []);
 
@@ -237,7 +256,6 @@ export default function AdminOrders({ adminKey, onAuthError, refresh }) {
                                             />
                                         </label>
 
-                                        {/* Save Button: Visually greyed out if nothing changed, turns black when you type */}
                                         <button
                                             type="button"
                                             className="adm-btn"

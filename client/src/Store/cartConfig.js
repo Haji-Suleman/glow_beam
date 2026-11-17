@@ -3,8 +3,9 @@ import { getProductBySlug } from './Products/Products';
 /* ------------------------------------------------------------------ */
 /*  Deal configuration                                                 */
 /* ------------------------------------------------------------------ */
-export const BOGO_SLUGS = ['Glowbeam-sculpt-brief']; // Buy 1 Get 1 Free
-export const MAIN_SLUGS = ['Glowbeam-sculpt-brief']; // products that unlock free gifts
+// 🚨 FIXED: Changed to lowercase to match Products.js and the backend
+export const BOGO_SLUGS = ['glowbeam-sculpt-brief']; // Buy 1 Get 1 Free
+export const MAIN_SLUGS = ['glowbeam-sculpt-brief']; // products that unlock free gifts
 export const UPSELL_ADDONS = ['belly-brush', 'flat-belly-ebook']; // shown in "You Might Also Like"
 
 const round2 = (n) => +Number(n).toFixed(2);
@@ -12,15 +13,8 @@ const round2 = (n) => +Number(n).toFixed(2);
 /* ------------------------------------------------------------------ */
 /*  Images / colors                                                    */
 /* ------------------------------------------------------------------ */
-// The cart shows the exact image for the selected color
-export const COLOR_IMAGES = {
-    Black: 'https://res.cloudinary.com/fozdhxik/image/upload/v1792915233/hf_20260831_132809_47a4a29b-6df6-4e44-909f-db4ef68a1cb3.png',
-    Beige: 'https://res.cloudinary.com/fozdhxik/image/upload/v1792915264/hf_20260831_132821_6e58af11-3748-4e69-8ae0-f98574666aa8.png',
-    Navy: 'https://res.cloudinary.com/fozdhxik/image/upload/v1792915325/hf_20260831_132836_44947fba-5c73-44f8-b8fc-e79f1d7e0197.png',
-    Lilac: 'https://res.cloudinary.com/fozdhxik/image/upload/v1792915445/hf_20260831_132846_a5faca2e-1c7d-4199-a287-93266a3b6e47.png',
-    Purple: 'https://res.cloudinary.com/fozdhxik/image/upload/v1792915527/hf_20260831_133028_8b701cf5-ba9d-4e01-91d6-be2660c9690c.png',
-    Violet: 'https://res.cloudinary.com/fozdhxik/image/upload/v1792915554/hf_20260831_132853_b47d758f-b612-4d26-9f5c-e1b537950930.png',
-};
+// 🚨 REMOVED: COLOR_IMAGES is no longer needed. We are now pulling 
+// variant images directly from Products.js to avoid conflicts.
 
 export const COLOR_HEX = {
     'Black': '#000000',
@@ -138,11 +132,20 @@ export const resolveLine = (line) => {
     const p = getProductBySlug(line.id);
     if (!p) return null;
 
-    // Exact image for the selected color, else gallery, else product image
-    const colorImg = COLOR_IMAGES[line.color];
-    const idx = p.colorImages?.[line.color];
+    // 🚨 FIXED: Bulletproof image resolution (Case-insensitive & trims spaces)
+    let idx;
+    if (p.colorImages && line.color) {
+        const cartColor = line.color.trim().toLowerCase();
+        const matchedKey = Object.keys(p.colorImages).find(
+            key => key.trim().toLowerCase() === cartColor
+        );
+        if (matchedKey) {
+            idx = p.colorImages[matchedKey];
+        }
+    }
+
     const fallbackImg = idx !== undefined ? p.gallery?.[idx] : p.gallery?.[0];
-    const image = thumb(colorImg || fallbackImg || p.image);
+    const image = thumb(fallbackImg || p.image);
 
     const variant = [line.color, line.size].filter(Boolean).join(', ');
     const qty = line.qty || 1;

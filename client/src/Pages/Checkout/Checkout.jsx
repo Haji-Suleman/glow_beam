@@ -5,7 +5,8 @@ import './Checkout.css';
 import Navbar from '../../Components/Navbar/Navbar';
 import Footer from '../../Components/Footer/Footer';
 import { useStore } from '../../Store/StoreContext';
-import { formatPrice } from '../../Store/Products/Products';
+// 1. IMPORT PRODUCTS HERE
+import { formatPrice, PRODUCTS } from '../../Store/Products/Products';
 
 const API = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 const EMPTY = { name: '', email: '', phone: '', address: '', city: '', postal_code: '', note: '' };
@@ -17,6 +18,27 @@ const Checkout = () => {
     const [busy, setBusy] = useState(false);
     const [serverError, setServerError] = useState('');
     const [done, setDone] = useState(null);
+
+    // 2. ADD THE IMAGE HELPER FUNCTION HERE
+    const getCheckoutItemImage = (item) => {
+        if (item.type === 'addon') return item.image;
+
+        // Find the product in the catalog
+        const product = PRODUCTS.find(p => p.slug === item.id || p.id === item.id);
+        if (!product) return item.image;
+
+        // Get image based on color
+        const idx = product.colorImages?.[item.color];
+        const rawImg =
+            (idx !== undefined ? product.gallery?.[idx] : undefined) ??
+            product.gallery?.[0] ??
+            product.image ??
+            item.image;
+
+        return typeof rawImg === 'string'
+            ? rawImg.replace(/width=\d+/, 'width=200')
+            : rawImg;
+    };
 
     // The cart expires after 5 minutes, so keep it alive while the customer types
     useEffect(() => {
@@ -153,7 +175,8 @@ const Checkout = () => {
                             {lines.map((l) => (
                                 <li key={l.key}>
                                     <span className="co-thumb">
-                                        <img src={l.image} alt="" />
+                                        {/* 3. USE THE HELPER FUNCTION HERE */}
+                                        <img src={getCheckoutItemImage(l)} alt={l.name} />
                                         <em>{l.qty}</em>
                                     </span>
                                     <span className="co-name">

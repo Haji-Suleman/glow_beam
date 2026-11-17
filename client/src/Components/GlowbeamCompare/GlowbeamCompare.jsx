@@ -43,7 +43,7 @@ export default function GlowbeamCompare({ onCtaClick }) {
     return (
         <section className="sbc">
             <div className="sbc-cta-wrap">
-                <button type="button" className="sbc-cta" onClick={onCtaClick}>
+                <button type="button" className="btn-pink sbc-cta" onClick={onCtaClick}>
                     Yes, I Want a Flatter Tummy
                 </button>
             </div>

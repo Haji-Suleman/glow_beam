@@ -1,0 +1,115 @@
+.blob-btn {
+    /* Change these per button */
+    --blob-color: #bc5386;
+    /* button background + border */
+    --blob-light: #d98bb1;
+    /* lighter pink the blobs are filled with */
+    --blob-text: #fff;
+    /* text stays white the whole time */
+    --blob-radius: 8px;
+    --blob-border: 2px;
+
+    position: relative;
+    z-index: 1;
+    display: inline-block;
+    padding: 17px 36px;
+    border: none;
+    outline: none;
+    background: transparent;
+    border-radius: var(--blob-radius);
+    color: var(--blob-text);
+    font: inherit;
+    font-weight: 700;
+    text-transform: uppercase;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* border, same color as the background so it's invisible at rest */
+.blob-btn::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    border: var(--blob-border) solid var(--blob-color);
+    border-radius: inherit;
+    pointer-events: none;
+}
+
+.blob-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 18px rgba(188, 83, 134, 0.3);
+}
+
+.blob-btn:focus-visible {
+    outline: 2px solid var(--blob-color);
+    outline-offset: 3px;
+}
+
+.blob-btn__inner {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    overflow: hidden;
+    border-radius: inherit;
+    background: var(--blob-color);
+    /* solid pink at rest */
+}
+
+.blob-btn__blobs {
+    position: relative;
+    display: block;
+    height: 100%;
+    filter: url("#goo");
+}
+
+.blob-btn__blob {
+    position: absolute;
+    top: var(--blob-border);
+    width: 25%;
+    height: 100%;
+    background: var(--blob-light);
+    /* lighter pink cloud */
+    border-radius: 100%;
+    transform: translate3d(0, 150%, 0) scale(1.4);
+    transition: transform 0.45s;
+}
+
+.blob-btn__blob:nth-child(1) {
+    left: 0;
+    transition-delay: 0s;
+}
+
+.blob-btn__blob:nth-child(2) {
+    left: 30%;
+    transition-delay: 0.08s;
+}
+
+.blob-btn__blob:nth-child(3) {
+    left: 60%;
+    transition-delay: 0.16s;
+}
+
+.blob-btn__blob:nth-child(4) {
+    left: 90%;
+    transition-delay: 0.24s;
+}
+
+.blob-btn:hover .blob-btn__blob,
+.blob-btn:focus-visible .blob-btn__blob {
+    transform: translateZ(0) scale(1.4);
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    .blob-btn,
+    .blob-btn__blob {
+        transition: none;
+    }
+
+    .blob-btn:hover {
+        transform: none;
+    }
+}

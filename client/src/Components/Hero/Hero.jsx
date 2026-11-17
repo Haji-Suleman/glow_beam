@@ -31,7 +31,7 @@ export default function Hero({
     description = "Two or three sentences about your product: what it is, who it is for, and why it is worth buying. Keep it short and specific.",
     bullets = ["First key benefit", "Second key benefit", "Third key benefit"],
     ctaLabel = "Shop now",
-    ctaHref = "/shop",
+    ctaHref = "/products/glowbeam-sculpt-brief",
     image = HERO_IMAGE,
     imageAlt = "Your product",
 }) {
@@ -63,7 +63,7 @@ export default function Hero({
                         ))}
                     </ul>
 
-                    <a href={ctaHref} className="hero__cta">
+                    <a href={ctaHref} className="btn-pink hero__cta">
                         {ctaLabel}
                     </a>
                 </div>

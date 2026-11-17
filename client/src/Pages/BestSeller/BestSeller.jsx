@@ -52,7 +52,7 @@ const ProductCard = ({ product, onChooseOptions }) => (
                 </h3>
                 <p className="product-card__price">{formatPrice(product.price)}</p>
                 <button
-                    className="product-card__btn"
+                    className="btn-pink product-card__btn"
                     type="button"
                     onClick={() => onChooseOptions(product)}
                 >

@@ -1,5 +1,12 @@
-/* Main Section Container */
+/* ============================================================
+   Contact page
+   ============================================================ */
 .contact-section {
+    --contact-accent: #bc5386;
+    --contact-border: #ebd3da;
+    --contact-bg: #fdf8f9;
+    --contact-error: #d64545;
+
     background-color: #ffffff;
     padding: 80px 20px;
     display: flex;
@@ -12,17 +19,28 @@
     max-width: 800px;
 }
 
-/* Heading */
+/* ---------- Heading ---------- */
 .contact-title {
     text-align: center;
     font-size: 2.5rem;
     font-weight: 800;
     color: #1a1a1a;
-    margin-bottom: 40px;
+    margin-bottom: 12px;
     letter-spacing: -0.5px;
+    text-wrap: balance;
 }
 
-/* Form Layout */
+.contact-subtitle {
+    max-width: 52ch;
+    margin: 0 auto 40px;
+    text-align: center;
+    font-size: 1rem;
+    line-height: 1.6;
+    color: #6b5d62;
+    text-wrap: pretty;
+}
+
+/* ---------- Form layout ---------- */
 .contact-form {
     display: flex;
     flex-direction: column;
@@ -32,7 +50,6 @@
 .form-row {
     display: flex;
     flex-direction: column;
-    /* Fixes the inline message issue by stacking */
     width: 100%;
 }
 
@@ -41,51 +58,43 @@
     gap: 20px;
 }
 
-/* Ensures the form-fields in split-row grow equally */
-.split-row .form-field {
-    flex: 1;
+.form-field {
     display: flex;
     flex-direction: column;
+    flex: 1;
+    min-width: 0;
+    width: 100%;
 }
 
-/* Inputs and Textareas */
+/* ---------- Inputs and textareas ---------- */
 .form-input {
     width: 100%;
     padding: 16px 20px;
     font-size: 1rem;
-    color: #333333;
-    background-color: #fdf8f9;
-    border: 1px solid #ebd3da;
-    border-radius: 6px;
-    box-sizing: border-box;
-    outline: none;
-    transition: border-color 0.2s ease, box-shadow 0.2s ease;
     font-family: inherit;
+    color: #333333;
+    background-color: var(--contact-bg);
+    border: 1px solid var(--contact-border);
+    border-radius: 8px;
+    outline: none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
 }
 
 .form-input::placeholder {
-    color: #777777;
+    color: #8a7e82;
     opacity: 1;
 }
 
+.form-input:hover {
+    border-color: #dcb5c3;
+}
+
 .form-input:focus {
-    border-color: #d1889e;
-    box-shadow: 0 0 0 3px rgba(209, 136, 158, 0.1);
+    border-color: var(--contact-accent);
+    background-color: #fff;
+    box-shadow: 0 0 0 4px rgba(188, 83, 134, 0.12);
 }
 
-/* Error State */
-.form-input.invalid {
-    border-color: #e74c3c;
-    background-color: #fdf0ef;
-}
-
-.form-error {
-    color: #e74c3c;
-    font-size: 0.85rem;
-    margin: 6px 0 0 4px;
-}
-
-/* Textarea specific styling */
 .form-textarea {
     resize: vertical;
     min-height: 100px;
@@ -95,123 +104,275 @@
     min-height: 140px;
 }
 
-/* Button */
-.send-button {
-    width: 100%;
-    padding: 18px;
-    font-size: 1rem;
-    font-weight: 700;
-    color: #ffffff;
-    background-color: #c4547e;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: background-color 0.2s ease;
-    text-align: center;
-    margin-top: 10px;
+/* ---------- Error state + helper row ---------- */
+.form-input.invalid {
+    border-color: var(--contact-error);
+    background-color: #fdf0ef;
 }
 
-.send-button:hover {
-    background-color: #b0456e;
+.form-input.invalid:focus {
+    box-shadow: 0 0 0 4px rgba(214, 69, 69, 0.14);
 }
 
-.send-button:disabled {
-    background-color: #d4a1b4;
-    cursor: not-allowed;
-}
-
-/* ---------------------------------------------------------------------------
-   Toast Notification Styles
---------------------------------------------------------------------------- */
-.toast {
-    position: fixed;
-    top: 24px;
-    right: 24px;
-    min-width: 300px;
-    max-width: 400px;
-    background-color: #ffffff;
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+.form-meta {
     display: flex;
-    align-items: center;
     justify-content: space-between;
-    padding: 16px 20px;
-    z-index: 9999;
-    animation: slideIn 0.3s ease-out forwards;
-    border-left: 6px solid;
-}
-
-.toast-content {
-    display: flex;
-    align-items: center;
+    align-items: flex-start;
     gap: 12px;
+    margin: 6px 4px 0;
 }
 
-.toast-icon {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 24px;
-    height: 24px;
-    border-radius: 50%;
-    color: #fff;
-    font-size: 14px;
-    font-weight: bold;
-}
-
-.toast p {
+.form-error {
     margin: 0;
-    font-size: 0.95rem;
-    color: #333;
+    font-size: 0.85rem;
+    color: var(--contact-error);
+    animation: form-error-in 0.2s ease;
 }
 
-.toast-close {
-    background: none;
-    border: none;
-    font-size: 1.5rem;
-    color: #999;
-    cursor: pointer;
-    padding: 0;
-    margin-left: 12px;
-    line-height: 1;
-}
-
-.toast-close:hover {
-    color: #333;
-}
-
-/* Success Toast */
-.toast-success {
-    border-left-color: #2ecc71;
-}
-
-.toast-success .toast-icon {
-    background-color: #2ecc71;
-}
-
-/* Error Toast */
-.toast-error {
-    border-left-color: #e74c3c;
-}
-
-.toast-error .toast-icon {
-    background-color: #e74c3c;
-}
-
-@keyframes slideIn {
+@keyframes form-error-in {
     from {
-        transform: translateX(100%);
         opacity: 0;
+        transform: translateY(-4px);
     }
 
     to {
-        transform: translateX(0);
         opacity: 1;
+        transform: translateY(0);
     }
 }
 
-/* Responsive adjustments */
+.form-counter {
+    margin-left: auto;
+    font-size: 0.8rem;
+    color: #8a7e82;
+    font-variant-numeric: tabular-nums;
+}
+
+/* ============================================================
+   Send button (base look comes from .btn-pink in index.css)
+   ============================================================ */
+.send-wrap {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+}
+
+.btn-pink.send-button {
+    display: grid;
+    place-items: center;
+    width: 100%;
+    height: 58px;
+    padding: 0 24px;
+    font-size: 1rem;
+    letter-spacing: 0.02em;
+    transition:
+        width 0.45s cubic-bezier(0.65, 0, 0.35, 1),
+        border-radius 0.45s cubic-bezier(0.65, 0, 0.35, 1),
+        background-color 0.3s ease,
+        transform 0.2s ease,
+        box-shadow 0.25s ease;
+}
+
+.btn-pink.send-button:active:not(:disabled) {
+    transform: scale(0.97);
+}
+
+/* stack ripple, label and spinner in the same grid cell */
+.send-button>* {
+    grid-area: 1 / 1;
+}
+
+/* ---------- Label ---------- */
+.send-label {
+    position: relative;
+    z-index: 1;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    transition: opacity 0.2s ease, transform 0.3s ease;
+}
+
+/* ---------- Click ripple ---------- */
+.send-ripple {
+    position: absolute;
+    z-index: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.45);
+    pointer-events: none;
+    transform: translate(-50%, -50%) scale(0);
+    animation: send-ripple 0.75s ease-out forwards;
+}
+
+@keyframes send-ripple {
+    to {
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 0;
+    }
+}
+
+/* ---------- Spinner (hidden until sending) ---------- */
+.send-spinner {
+    z-index: 1;
+    width: 24px;
+    height: 24px;
+    border: 3px solid rgba(255, 255, 255, 0.35);
+    border-top-color: #fff;
+    border-radius: 50%;
+    opacity: 0;
+    transform: scale(0.4);
+    transition: opacity 0.2s ease, transform 0.3s ease;
+    animation: send-spin 0.7s linear infinite;
+}
+
+@keyframes send-spin {
+    to {
+        rotate: 360deg;
+    }
+}
+
+/* ---------- Sending: shrink into a circle ---------- */
+.btn-pink.send-button.is-sending,
+.btn-pink.send-button.is-sending:hover {
+    width: 58px;
+    padding: 0;
+    border-radius: 999px;
+    transform: none;
+    opacity: 1;
+    cursor: progress;
+}
+
+.send-button.is-sending .send-label {
+    opacity: 0;
+    transform: scale(0.6);
+}
+
+.send-button.is-sending .send-spinner {
+    opacity: 1;
+    transform: scale(1);
+}
+
+/* ---------- Success: green, checkmark draws itself ---------- */
+.btn-pink.send-button.is-success {
+    --btn-color: #2f9e6e;
+    --btn-color-dark: #278159;
+    --btn-shadow: rgba(47, 158, 110, 0.35);
+    opacity: 1;
+    cursor: default;
+}
+
+.send-check {
+    width: 22px;
+    height: 22px;
+    fill: none;
+    stroke: #fff;
+    stroke-width: 3;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.send-check path {
+    stroke-dasharray: 24;
+    stroke-dashoffset: 24;
+    animation: send-draw 0.45s 0.15s ease forwards;
+}
+
+@keyframes send-draw {
+    to {
+        stroke-dashoffset: 0;
+    }
+}
+
+.send-button.is-success .send-label {
+    animation: send-pop 0.5s ease;
+}
+
+@keyframes send-pop {
+    0% {
+        transform: scale(0.7);
+    }
+
+    60% {
+        transform: scale(1.12);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+/* ---------- Error: red + shake ---------- */
+.btn-pink.send-button.is-error {
+    --btn-color: #d64545;
+    --btn-color-dark: #b93636;
+    --btn-shadow: rgba(214, 69, 69, 0.35);
+    animation: send-shake 0.5s ease;
+}
+
+@keyframes send-shake {
+
+    0%,
+    100% {
+        translate: 0;
+    }
+
+    20% {
+        translate: -8px;
+    }
+
+    40% {
+        translate: 8px;
+    }
+
+    60% {
+        translate: -5px;
+    }
+
+    80% {
+        translate: 5px;
+    }
+}
+
+/* ---------- Confetti burst (outside the button so it isn't clipped) ---------- */
+.send-confetti {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    pointer-events: none;
+    z-index: 5;
+}
+
+.send-confetti span {
+    position: absolute;
+    width: 9px;
+    height: 14px;
+    border-radius: 2px;
+    opacity: 0;
+    animation: send-confetti 1s cubic-bezier(0.15, 0.7, 0.3, 1) forwards;
+}
+
+@keyframes send-confetti {
+    0% {
+        opacity: 1;
+        transform: translate(0, 0) rotate(0) scale(1);
+    }
+
+    100% {
+        opacity: 0;
+        transform: translate(var(--x), var(--y)) rotate(var(--r)) scale(0.5);
+    }
+}
+
+/* ============================================================
+   Responsive
+   ============================================================ */
 @media (max-width: 600px) {
+    .contact-section {
+        padding: 48px 16px;
+    }
+
     .split-row {
         flex-direction: column;
         gap: 20px;
@@ -221,11 +382,30 @@
         font-size: 2rem;
     }
 
-    .toast {
-        top: 16px;
-        right: 16px;
-        left: 16px;
-        min-width: unset;
-        max-width: unset;
+    .contact-subtitle {
+        margin-bottom: 28px;
+    }
+}
+
+/* ============================================================
+   Reduced motion
+   ============================================================ */
+@media (prefers-reduced-motion: reduce) {
+
+    .form-error,
+    .send-ripple,
+    .send-confetti span,
+    .send-check path,
+    .send-button.is-success .send-label,
+    .btn-pink.send-button.is-error {
+        animation: none;
+    }
+
+    .send-check path {
+        stroke-dashoffset: 0;
+    }
+
+    .send-spinner {
+        animation-duration: 1.6s;
     }
 }

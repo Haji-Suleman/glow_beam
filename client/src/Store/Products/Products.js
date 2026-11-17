@@ -6,18 +6,39 @@ const SIZES = ['XS', 'S', 'M', 'L', 'XL', '2XL', '3XL'];
 export const PRODUCTS = [
     {
         id: 1,
-        slug: 'Glowbeam-sculpt-brief',
+        slug: 'glowbeam-sculpt-brief', // Fixed to lowercase to match backend & cart
         name: 'Glowbeam Sculpt Brief',
         price: 11207.31,
         created: 4,
-        colors: ['Beige', 'Fuchsia pink', 'Black'],
+        // Added the missing colors from your screenshot
+        colors: ['Beige', 'Fuchsia pink', 'Violet', 'Lilac', 'Black', 'Navy', 'Purple'],
         sizes: SIZES,
         image: img('hf_20260901_132006_386d39af-1e77-4e65-97f6-16cc602a2872.png', 533),
         hoverImage: img('05_diagram_62a6e59e-8b3d-4dea-8eee-324ca92cc6d5.png', 533),
         gallery: [
+            // Index 0 & 1 (Lifestyle/Default images)
             img('hf_20260901_132006_386d39af-1e77-4e65-97f6-16cc602a2872.png'),
             img('05_diagram_62a6e59e-8b3d-4dea-8eee-324ca92cc6d5.png'),
+
+            // ⚠️ REPLACE THESE PLACEHOLDERS WITH YOUR ACTUAL CDN FILENAMES
+            img('YOUR_BEIGE_IMAGE_FILENAME.jpg'),       // Index 2
+            img('YOUR_FUCHSIA_IMAGE_FILENAME.jpg'),     // Index 3
+            img('YOUR_VIOLET_IMAGE_FILENAME.jpg'),      // Index 4
+            img('YOUR_LILAC_IMAGE_FILENAME.jpg'),       // Index 5
+            img('YOUR_BLACK_IMAGE_FILENAME.jpg'),       // Index 6
+            img('YOUR_NAVY_IMAGE_FILENAME.jpg'),        // Index 7
+            img('YOUR_PURPLE_IMAGE_FILENAME.jpg'),      // Index 8
         ],
+        // Maps the color name directly to the gallery index above
+        colorImages: {
+            'Beige': 2,
+            'Fuchsia pink': 3,
+            'Violet': 4,
+            'Lilac': 5,
+            'Black': 6,
+            'Navy': 7,
+            'Purple': 8,
+        },
     },
     {
         id: 2,

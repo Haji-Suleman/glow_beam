@@ -266,6 +266,30 @@ const CartDrawer = () => {
     const handleAddonAdd = (a) =>
         addToCart({ type: 'addon', id: a.id }, { open: false });
 
+    /* --- NEW HELPER: Resolves the correct variant image for the cart --- */
+    const getCartItemImage = (line) => {
+        if (line.type === 'addon') return line.image;
+
+        // Find the product in the catalog to get its specific gallery/colorImages
+        const product = PRODUCTS.find(p => p.slug === line.id || p.id === line.id);
+        if (!product) return line.image; // Fallback
+
+        // Get the image index for the specific color
+        const idx = product.colorImages?.[line.color];
+
+        // Resolve the image from the gallery, fallback to default
+        const rawImg =
+            (idx !== undefined ? product.gallery?.[idx] : undefined) ??
+            product.gallery?.[0] ??
+            product.image ??
+            line.image;
+
+        // Resize if it's a dynamic CDN URL
+        return typeof rawImg === 'string'
+            ? rawImg.replace(/width=\d+/, 'width=200')
+            : rawImg;
+    };
+
     return (
         <>
             <div className={`cd-overlay ${isOpen ? 'is-open' : ''}`} onClick={closeCart} />
@@ -305,10 +329,13 @@ const CartDrawer = () => {
                         <ul className="cd-items">
                             {lines.map((l) => {
                                 const href = lineHref(l);
+                                // Use the new helper function here instead of l.image
+                                const itemImage = getCartItemImage(l);
+
                                 return (
                                     <li className="cd-item" key={l.key}>
                                         <CardLink href={href} onNavigate={handleNavigate}>
-                                            <img className="cd-item__img" src={l.image} alt={l.name} />
+                                            <img className="cd-item__img" src={itemImage} alt={l.name} />
                                         </CardLink>
                                         <div className="cd-item__main">
                                             <h4>

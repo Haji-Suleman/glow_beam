@@ -1,5 +1,87 @@
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&family=Noto+Serif:ital,wdth,wght@0,67.3,100..900;1,67.3,100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Quicksand:wght@300..700&display=swap');
+
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  font-family: 'Poppins', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.btn-pink {
+  --btn-color: #bc5386;
+  --btn-color-dark: #a8446f;
+  --btn-shadow: rgba(188, 83, 134, 0.35);
+
+  position: relative;
+  overflow: hidden;
+  display: inline-block;
+  padding: 17px 36px;
+  border: none;
+  border-radius: 8px;
+  background: var(--btn-color);
+  color: #fff;
+  font: inherit;
+  font-weight: 700;
+  text-transform: uppercase;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+  isolation: isolate;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, background-color 0.25s ease;
+}
+
+/* the shine */
+.btn-pink::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -75%;
+  z-index: -1;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(120deg,
+      transparent,
+      rgba(255, 255, 255, 0.35),
+      transparent);
+  transform: skewX(-20deg);
+}
+
+.btn-pink:hover {
+  background: var(--btn-color-dark);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 22px var(--btn-shadow);
+}
+
+.btn-pink:hover::after {
+  left: 130%;
+  transition: left 0.7s ease;
+}
+
+.btn-pink:active {
+  transform: translateY(0);
+  box-shadow: 0 4px 10px var(--btn-shadow);
+}
+
+.btn-pink:focus-visible {
+  outline: 2px solid var(--btn-color);
+  outline-offset: 3px;
+}
+
+.btn-pink:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+  .btn-pink,
+  .btn-pink:hover::after {
+    transition: none;
+  }
+
+  .btn-pink:hover {
+    transform: none;
+  }
 }

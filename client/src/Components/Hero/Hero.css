@@ -1,10 +1,15 @@
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap");
 
-/* Change these to restyle the hero */
+/* ============================================================
+   Hero
+   Change the variables below to restyle the whole section.
+   ============================================================ */
 .hero {
     --hero-accent: #bc5386;
     --hero-text: #2b2230;
     --hero-muted: #5b4b60;
+    --hero-radius: 16px;
+
     font-family: "Poppins", system-ui, -apple-system, "Segoe UI", sans-serif;
     color: var(--hero-text);
 
@@ -25,6 +30,10 @@
 }
 
 /* ---------- Text column ---------- */
+.hero__content {
+    min-width: 0;
+}
+
 .hero__rating {
     display: flex;
     align-items: center;
@@ -44,10 +53,11 @@
 
 .hero__title {
     margin: 0;
-    font-size: 2.6rem;
+    font-size: clamp(2rem, 1.4rem + 1.6vw, 2.6rem);
     font-weight: 700;
     line-height: 1.1;
     color: var(--hero-text);
+    text-wrap: balance;
 }
 
 .hero__highlight {
@@ -55,12 +65,14 @@
 }
 
 .hero__description {
+    max-width: 52ch;
     margin: 14px 0 0 50px;
     font-size: 1rem;
     font-weight: 400;
-    line-height: 1.45;
+    line-height: 1.5;
     letter-spacing: 0.02em;
     color: var(--hero-muted);
+    text-wrap: pretty;
 }
 
 .hero__bullets {
@@ -89,29 +101,9 @@
     color: var(--hero-accent);
 }
 
+/* Button look comes from .btn-pink (index.css); only layout lives here */
 .hero__cta {
-    display: inline-block;
     margin-top: 28px;
-    padding: 17px 36px;
-    border-radius: 8px;
-    background: var(--hero-accent);
-    color: #fff;
-    font-size: 1rem;
-    font-weight: 700;
-    line-height: 1.5;
-    letter-spacing: 0.01em;
-    text-transform: uppercase;
-    text-decoration: none;
-    transition: filter 0.15s ease;
-}
-
-.hero__cta:hover {
-    filter: brightness(0.92);
-}
-
-.hero__cta:focus-visible {
-    outline: 2px solid var(--hero-text);
-    outline-offset: 3px;
 }
 
 /* ---------- Image column ---------- */
@@ -119,13 +111,12 @@
     display: block;
     width: 100%;
     height: auto;
-    /* <- add this */
     aspect-ratio: 4 / 5;
     object-fit: cover;
-    border-radius: 16px;
+    border-radius: var(--hero-radius);
 }
 
-/* ---------- Mobile / tablet ---------- */
+/* ---------- Tablet ---------- */
 @media (max-width: 900px) {
     .hero {
         margin-top: 24px;
@@ -137,11 +128,8 @@
         gap: 32px;
     }
 
-    .hero__title {
-        font-size: 2rem;
-    }
-
     .hero__description {
+        max-width: none;
         margin-left: 0;
     }
 
@@ -149,15 +137,19 @@
         max-width: 380px;
         margin: 0 auto;
     }
+}
+
+/* ---------- Mobile ---------- */
+@media (max-width: 600px) {
+    .hero__inner {
+        width: min(1000px, 100% - 32px);
+    }
 
     .hero__cta {
         display: block;
+        width: 100%;
+        max-width: 420px;
+        margin-inline: auto;
         text-align: center;
-    }
-}
-
-@media (prefers-reduced-motion: reduce) {
-    .hero__cta {
-        transition: none;
     }
 }
