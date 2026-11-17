@@ -59,7 +59,7 @@ export default function CustomerService({
     title = "Customer Service",
     description = "Tell customers how to reach you and what to expect. Keep it short, friendly, and honest.",
     hours = "Your support hours go here",
-    email = "hello@yourstore.com",
+    email = "info@zootsyshop.com",
     replyNote = "Tell customers how fast you usually reply.",
     features = [
         { icon: "shield", label: "Your guarantee" },

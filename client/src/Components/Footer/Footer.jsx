@@ -39,7 +39,7 @@ export default function Footer({
     badge = null,
     helpTitle = "We are here to help",
     helpText = "Tell customers how to reach you and what to expect.",
-    email = "hello@yourstore.com",
+    email = "info@zootsyshop.com",
     helpNote = " — add your support hours and reply time here.",
     linksTitle = "Quick links",
     links = [
