@@ -27,6 +27,14 @@ _CATALOG = {
     "belly-brush": ("Belly Sculpt Brush", 2785.90, 2785.90),
     "flat-belly-ebook": ("The Flat Belly Method", 0.00, 0.00),
     "gift-card": ("$10 Gift Card", 0.00, 0.00),
+    # Add these missing items:
+    "sculpt-shorts-no-ride-up": (
+        "Sculpt Shorts · No Ride-Up",
+        11207.31,
+        14015.15,
+    ),  # Added compare price based on other item's pattern
+    "sculpt-bra-wireless-lift": ("Sculpt Bra · Wireless Lift", 9802.89, 9802.89),
+    "sculpt-pant-flat-front": ("Sculpt Pant · Flat Front", 19633.86, 19633.86),
 }
 
 
